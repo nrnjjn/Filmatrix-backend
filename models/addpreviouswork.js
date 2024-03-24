@@ -1,28 +1,28 @@
 import mongoose, {Schema,model} from "mongoose";
+import seeker from "./seekers.js";
 
 const previousworkSchema=new Schema({
+    userId:{
+        type:mongoose.Types.ObjectId,
+        ref:seeker
+    },
     Job:{
         type:String,
-        required:true
+       
     },
     Description:{
         type:String,
-        required:true
     },
     Image:{
         type:String
     },
     Fromdate:{
         type:Date,
-        required:true
     },
     Todate:{
         type:Date,
-        required:true
     },
-    seekerId:{
-        type:String
-    }
+    
 })
 
 const Addpreviouswork=model('previouswork',previousworkSchema)

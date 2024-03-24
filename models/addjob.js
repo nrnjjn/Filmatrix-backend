@@ -11,7 +11,7 @@ const  addjobSchema=new Schema({
         required:true
     },
     Vacancy:{
-        type:String,
+        type:Number,
         required:true
     },
     Description:{

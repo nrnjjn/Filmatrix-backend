@@ -1,6 +1,7 @@
 import express from 'express'
 import Seekers from '../models/seekers.js'
 import Addpreviouswork from '../models/addpreviouswork.js'
+import Addjob from '../models/addjob.js'
 import { upload } from '../multer.js'
 
 const router=express()
@@ -43,10 +44,11 @@ res.json(e.message)
 }
 })
 
-router.post('/addpreviouswork',async(req,res)=>{
+router.post('/addpreviouswork',upload.single('Image'),async(req,res)=>{
     try{
-        console.log(req.body);
-        const newPreviouswork = new Addpreviouswork(req.body)
+        console.log(req.file);
+        let imagepath=req.file.filename
+        const newPreviouswork = new Addpreviouswork({...req.body,Image:imagepath})
         const savedPreviouswork = await newPreviouswork.save()
         res.json({message:"Previous Work",savedPreviouswork})
 
@@ -54,6 +56,43 @@ router.post('/addpreviouswork',async(req,res)=>{
     catch(e){
         res.json(e.message)
     }
+})
+
+router.get('/viewpreviouswork/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id)
+    let response=await Addpreviouswork.find({userId:id})
+    console.log(response);
+    res.json(response)
+})
+
+router.get('/viewpreviousworkd/:id',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(id);
+    let response=await Addpreviouswork.findById(id)
+    console.log(response)
+    res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+
+router.put('/editpreviouswork/:id',upload.fields([{name:'Image'}]),async(req,res)=>{
+    try{
+    if(req.files['Image']){
+        const image =  req.files['Image'][0].filename;  
+        console.log(image)
+        req.body={...req.body,Image:image}
+    }
+    let id=req.params.id
+    console.log(req.body)
+    let response=await Addpreviouswork.findByIdAndUpdate(id,req.body)
+}
+catch(e){
+    res.json(e.message)
+}
 })
 
 router.get('/viewprofile/:id',async(req,res)=>{
@@ -66,7 +105,6 @@ router.get('/viewprofile/:id',async(req,res)=>{
 
 router.put('/editprofile/:id',upload.fields([{name:'Liscence'}]),async(req,res)=>{
     try{
-
     
     if(req.files['Liscence']){
         const liscence =  req.files['Liscence'][0].filename;  
@@ -80,6 +118,13 @@ router.put('/editprofile/:id',upload.fields([{name:'Liscence'}]),async(req,res)=
 catch(e){
     res.json(e.message)
 }
+})
+
+router.get('/viewjob',async(req,res)=>{
+    console.log(req.body);
+    let response=await Addjob.find()
+    console.log(response)
+    res.json(response)
 })
 
 export default router
