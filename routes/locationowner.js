@@ -35,6 +35,7 @@ router.get('/viewlocd/:id',async(req,res)=>{
     console.log(response)
     res.json(response)
 })
+
 router.put('/editloc/:id',upload.fields([{name:'Image'}]),async(req,res)=>{
     try{
     if(req.files['Image']){

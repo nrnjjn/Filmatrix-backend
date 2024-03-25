@@ -3,7 +3,6 @@ import  {Schema,model} from "mongoose";
 const seekersSchema = new Schema({
     Name:{
         type:String,
-        
     },
     Email:{
         type:String,
