@@ -62,11 +62,24 @@ router.get('/viewlocd/:id',async(req,res)=>{
     res.json(response)
 })
 
-router.get('/viewhiringreq',async(req,res)=>{
+router.get('/viewhiringreq/:id',async(req,res)=>{
+    let id=req.params.id
     console.log(req.body);
     let response=await Hiringrequest.find()
     console.log(response)
-    res.json(response)
+    // res.json(response)
+    let resposedata=[];
+    for (const newrespose of response){
+        let hiring=await Seekers.findById(newrespose.userId);
+        let anc=await Announcement.findById(newrespose.ancId);
+        resposedata.push({
+            hiring:hiring,
+            anc:anc,
+            req:newrespose
+        });
+    }
+    console.log(resposedata)
+    res.json(resposedata)
 })
 
 export default router

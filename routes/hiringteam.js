@@ -33,6 +33,7 @@ router.get('/viewancd/:id',async(req,res)=>{
 
 router.post('/posthiringreq',async(req,res)=>{
     try{
+    let id=req.params.id
     console.log(req.body);
     const newHiringreq = new Hiringrequest(req.body)
     const savedHiringreq = await newHiringreq.save();
@@ -41,6 +42,14 @@ router.post('/posthiringreq',async(req,res)=>{
     catch(e){
         res.json(e.message)
             }
+})
+
+router.get('/viewhreq/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id);
+    let response=await Hiringrequest.find({userId:id})
+    console.log(response)
+    res.json(response)
 })
 
 export default router

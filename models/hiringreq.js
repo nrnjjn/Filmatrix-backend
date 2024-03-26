@@ -1,14 +1,15 @@
 import mongoose,{Schema,model} from "mongoose";
 import seeker from "./seekers.js"
+import announcement from "./announcement.js"
 
 const hiringreqSchema=new Schema({
     userId:{
         type:mongoose.Types.ObjectId,
         ref:seeker
     },
-    companyId:{
+    ancId:{
         type:mongoose.Types.ObjectId,
-        ref:seeker
+        ref:announcement
     },
     Date:{
         type:Date,
