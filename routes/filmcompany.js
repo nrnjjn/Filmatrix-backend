@@ -82,4 +82,11 @@ router.get('/viewhiringreq/:id',async(req,res)=>{
     res.json(resposedata)
 })
 
+router.put('/manageHiring/:id',async (req,res)=>{
+    let id=req.params.id
+    console.log(id);
+    console.log(req.body)
+    let response=await User.findByIdAndUpdate(id,req.body)
+})
+
 export default router

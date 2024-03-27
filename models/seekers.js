@@ -41,6 +41,9 @@ const seekersSchema = new Schema({
     },
     userType:{
         type:String
+    },
+    Status:{
+        type:String
     }
 })
  const Seekers=model('Seekers', seekersSchema)

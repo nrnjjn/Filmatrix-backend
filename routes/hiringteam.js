@@ -2,6 +2,7 @@ import express from 'express'
 import Addjob from '../models/addjob.js';
 import Announcement from '../models/announcement.js';
 import Hiringrequest from '../models/hiringreq.js';
+import Locationreq from '../models/locationfcreq.js';
 const router=express()
 
 router.post('/addjob',async(req,res)=>{
@@ -51,5 +52,20 @@ router.get('/viewhreq/:id',async(req,res)=>{
     console.log(response)
     res.json(response)
 })
+
+router.post('/locreq',async(req,res)=>{
+    try{
+        let id=req.params.id
+        console.log(req.body);
+        const newLocreq = new Locationreq(req.body)
+        const savedLocreq = await newLocreq.save();
+        res.json({message:"Location request",savedLocreq})
+        }
+        catch(e){
+            res.json(e.message)
+                }
+})
+
+
 
 export default router
