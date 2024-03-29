@@ -3,7 +3,7 @@ import seeker from "./seekers.js"
 import announcement from "./announcement.js";
 
 const progressSchema=new Schema({
-    userId:{
+    hiringId:{
         type:mongoose.Types.ObjectId,
         ref:seeker
     },
@@ -19,6 +19,7 @@ const progressSchema=new Schema({
         default:Date.now
     }
 })
+
 
 const Progress=model('progress',progressSchema)
 export default Progress

@@ -1,10 +1,11 @@
-import express from 'express'
+import express, { json } from 'express'
 import Addjob from '../models/addjob.js';
 import Announcement from '../models/announcement.js';
 import Hiringrequest from '../models/hiringreq.js';
 import Locationreq from '../models/locationfcreq.js';
 import Progress from '../models/progress.js';
 import Addlocation from '../models/addlocation.js';
+import Seekers from '../models/seekers.js';
 const router=express()
 
 router.post('/addjob',async(req,res)=>{
@@ -52,13 +53,7 @@ router.post('/posthiringreq',async(req,res)=>{
             }
 })
 
-router.get('/viewhreq/:id',async(req,res)=>{
-    let id=req.params.id
-    console.log(id);
-    let response=await Hiringrequest.find({userId:id})
-    console.log(response)
-    res.json(response)
-})
+
 
 
 router.post('/locreq',async(req,res)=>{
@@ -80,7 +75,7 @@ router.get('/locreqst/:id',async(req,res)=>{
         let id=req.params.id
     console.log(req.body);
     let response=await Locationreq.find({hiringId:id})
-    console.log(response,'response...........');
+    console.log(response);
     let responsedata=[];
     for (const newresponse of response){
         let film=await Announcement.findById(newresponse.Filmname);
@@ -99,12 +94,57 @@ catch(e){
 }
 })
 
+router.get('/viewhreq/:id',async(req,res)=>{
+    try{
+        let id=req.params.id
+        console.log(id);
+        let response=await Hiringrequest.find({userId:id})
+        console.log(response)
+        let responsedata=[];
+    for (const newresponse of response){
+        let film=await Announcement.findById(newresponse.ancId);
+        responsedata.push({
+            film:film,
+            req:newresponse
+        })
+    }
+    console.log(responsedata)
+    res.json(responsedata)
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+
 router.post('/addprogress',async(req,res)=>{
     try{
+    let id=req.params.id
     console.log(req.body);
     const newaddProgress = new Progress(req.body)
     const savedProgress=await newaddProgress.save();
     res.json({message:"Add progress",savedProgress})
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+
+router.get('/viewfilmcompany/:id',async(req,res)=>{
+    try{
+        let id=req.params.id
+        console.log(req.body);
+        let response=await Announcement.find()
+        console.log(response)
+        let responsedata=[];
+        for(const newresponse of response){
+            let film=await Seekers.findById(newresponse.companyId)
+            responsedata.push({
+                companyName:film.companyName,
+                req:newresponse
+            })
+        }
+        console.log(responsedata);
+        res.json(responsedata)
     }
     catch(e){
         res.json(e.message)
