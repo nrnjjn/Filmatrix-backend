@@ -6,6 +6,7 @@ import { upload } from '../multer.js'
 import Addlocation from '../models/addlocation.js'
 import Seekers from '../models/seekers.js'
 import Hiringrequest from '../models/hiringreq.js'
+import Locationreq from '../models/locationfcreq.js'
 const router=express()
 
 
@@ -86,7 +87,55 @@ router.put('/manageHiring/:id',async (req,res)=>{
     let id=req.params.id
     console.log(id);
     console.log(req.body)
-    let response=await User.findByIdAndUpdate(id,req.body)
+    let response=await Hiringrequest.findByIdAndUpdate(id,req.body)
+})
+
+router.get('/viewlocreq/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(req.body);
+    let response=await Locationreq.find()
+    console.log(response)
+    // res.json(response)
+    let resposedata=[];
+    for (const newrespose of response){
+        let hiring=await Seekers.findById(newrespose.hiringId);
+        // let anc=await Announcement.findById(newrespose.ancId);
+        let loc=await Addlocation.findById(newrespose.locationId)
+        resposedata.push({
+            hiring:hiring,
+            // anc:anc,
+            loc:loc,
+            req:newrespose
+        });
+    }
+    console.log(resposedata)
+    res.json(resposedata)
+})
+
+router.get('/viewlocfname/:id',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(req.body);
+    let response=await Hiringrequest.find({userId:id,Status:'Accepted'})
+    console.log(response)
+    // res.json(response)
+    let resposedata=[];
+    for (const newrespose of response){
+        let anc=await Announcement.findById(newrespose.ancId);
+        let hiring=await Seekers.findById(newrespose.userId)
+        resposedata.push({
+            hiring:hiring,
+            anc:anc,
+            // loc:loc,
+            req:newrespose
+        });
+    }
+    console.log(resposedata)
+    res.json(resposedata)
+}
+catch(e){
+    res.json(e.message)
+}
 })
 
 export default router
