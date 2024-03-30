@@ -37,4 +37,12 @@ router.get('/viewlocationowner',async(req,res)=>{
 
 })
 
+router.get('/viewseekers',async(req,res)=>{
+    console.log(req.body);
+    let response=await Seekers.find({userType:'seekers',Status:'Accepted'})
+    console.log(response);
+    res.json(response)
+
+})
+
 export default router

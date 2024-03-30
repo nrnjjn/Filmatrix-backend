@@ -44,7 +44,7 @@ const seekersSchema = new Schema({
     },
     Status:{
         type:String,
-        default:'pending'
+        default:'Pending'
     }
 })
  const Seekers=model('Seekers', seekersSchema)
