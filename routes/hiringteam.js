@@ -20,6 +20,23 @@ router.post('/addjob',async(req,res)=>{
             }
 })
 
+router.get('/viewjob/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(req.body);
+    let response=await Addjob.find()
+    console.log(response)
+    let responsedata=[];
+    for(const newresponse of response){
+        let anc=await Announcement.findById(newresponse.ancId);
+        responsedata.push({
+            anc:anc,
+            req:newresponse
+        })
+    }
+    console.log(responsedata)
+    res.json(responsedata)
+})
+
 router.get('/viewanc',async(req,res)=>{
     try{
     console.log(req.body);

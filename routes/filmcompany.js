@@ -115,7 +115,6 @@ router.get('/viewlocreq/:id',async(req,res)=>{
 router.get('/viewlocfname/:id',async(req,res)=>{
     try{
     let id=req.params.id
-    console.log(req.body);
     let response=await Hiringrequest.find({userId:id,Status:'Accepted'})
     console.log(response)
     // res.json(response)

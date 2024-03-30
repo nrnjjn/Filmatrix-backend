@@ -12,6 +12,7 @@ import seekersRouter from './routes/seekers.js'
 import filmcompanyRouter from './routes/filmcompany.js'
 import hiringteamRouter from './routes/hiringteam.js'
 import locationownerRouter from './routes/locationowner.js'
+import adminRouter from './routes/admin.js'
 
 app.use('/uploads', express.static('uploads'));
 
@@ -21,6 +22,7 @@ app.use('/seekers',seekersRouter)
 app.use('/filmcompany',filmcompanyRouter)
 app.use('/hiringteam',hiringteamRouter)
 app.use('/locationowner',locationownerRouter)
+app.use('/admin',adminRouter)
 
 
 app.listen(4000)
