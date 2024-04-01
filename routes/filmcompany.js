@@ -83,6 +83,16 @@ router.get('/viewhiringreq/:id',async(req,res)=>{
     res.json(resposedata)
 })
 
+router.get('/viewhiringdetail/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id);
+    let response=await Hiringrequest.findById(id)
+    console.log(response)
+    let hiring=await Seekers.findById(response.userId)
+    let anc=await Announcement.findById(response.ancId)
+    res.json({response,hiring,anc})
+})
+
 router.put('/manageHiring/:id',async (req,res)=>{
     let id=req.params.id
     console.log(id);
@@ -108,7 +118,7 @@ router.get('/viewlocreq/:id',async(req,res)=>{
     let resposedata=[];
     for (const newrespose of response){
         let hiring=await Seekers.findById(newrespose.hiringId);
-        let anc=await Announcement.findById(newrespose.ancId);
+        let anc=await Announcement.findById(newrespose.Filmname);
         let loc=await Addlocation.findById(newrespose.locationId)
         resposedata.push({
             hiring:hiring,
@@ -119,6 +129,31 @@ router.get('/viewlocreq/:id',async(req,res)=>{
     }
     console.log(resposedata)
     res.json(resposedata)
+})
+
+router.get('/viewlocreqd/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id);
+    let response=await Locationreq.findById(id)
+    console.log(response)
+    let hiring=await Seekers.findById(response.hiringId)
+    let anc=await Announcement.findById(response.Filmname)
+    let loc=await Addlocation.findById(response.locationId)
+    res.json({response,hiring,anc,loc})
+    // let resposedata=[];
+    // for (const newrespose of response){
+    //     let hiring=await Seekers.findById(newrespose.hiringId);
+    //     let anc=await Announcement.findById(newrespose.Filmname);
+    //     let loc=await Addlocation.findById(newrespose.locationId)
+    //     resposedata.push({
+    //         hiring:hiring,
+    //         anc:anc,
+    //         loc:loc,
+    //         req:newrespose
+    //     });
+    // }
+    // console.log(resposedata)
+    // res.json(resposedata)
 })
 
 router.get('/viewlocfname/:id',async(req,res)=>{
@@ -145,5 +180,6 @@ catch(e){
     res.json(e.message)
 }
 })
+
 
 export default router

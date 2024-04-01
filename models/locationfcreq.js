@@ -4,7 +4,7 @@ import hiring from './seekers.js'
 import location from './addlocation.js'
 
 const locreqSchema = new Schema({
-    ancId:{
+    Filmname:{
         type:mongoose.Types.ObjectId,
         ref:announcement
     },
@@ -22,7 +22,7 @@ const locreqSchema = new Schema({
     },
     Date:{
         type:Date,
-        default:Date.now
+        
     },
     Noofdays:{
         type:Number

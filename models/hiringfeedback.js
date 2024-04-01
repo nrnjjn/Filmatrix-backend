@@ -1,14 +1,15 @@
 import mongoose, {Schema,model} from "mongoose";
-import seeker from './seekers.js'
+import Seekers from "./seekers.js";
+import Announcement from "./announcement.js";
 
 const hiringfeedbackSchema=new Schema({
-    hiringName:{
-        type:String,
-        required:true
+    hiringId:{
+        type:mongoose.Types.ObjectId,
+        ref:Seekers
     },
-    filmName:{
-        type:String,
-        required:true
+    ancId:{
+        type:mongoose.Types.ObjectId,
+        ref:Announcement
     },
     feedback:{
         type:String,
