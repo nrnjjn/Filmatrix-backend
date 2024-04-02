@@ -21,6 +21,13 @@ const hiringreqSchema=new Schema({
     },
     Description:{
         type:String,
+    },
+    Feedback:{
+        type:String,
+    },
+    Progress:{
+        type:String,
+        default:"No update"
     }
 })
 

@@ -20,6 +20,14 @@ router.post('/addjob',async(req,res)=>{
             }
 })
 
+router.put('/editjob/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id);
+    console.log(req.body)
+    let response=await Addjob.findByIdAndUpdate(id,req.body)
+    console.log(response);
+})
+
 router.get('/viewjob/:id',async(req,res)=>{
     let id=req.params.id
     console.log(req.body);
@@ -120,8 +128,10 @@ router.get('/viewhreq/:id',async(req,res)=>{
         let responsedata=[];
     for (const newresponse of response){
         let film=await Announcement.findById(newresponse.ancId);
+        let companyName=await Seekers.findById(film.companyId);
         responsedata.push({
             film:film,
+            companyName :companyName.companyName,
             req:newresponse
         })
     }
@@ -133,39 +143,51 @@ router.get('/viewhreq/:id',async(req,res)=>{
     }
 })
 
-router.post('/addprogress',async(req,res)=>{
-    try{
+
+// router.post('/addprogress',async(req,res)=>{
+//     try{
+//     let id=req.params.id
+//     console.log(req.body);
+//     const newaddProgress = new Progress(req.body)
+//     const savedProgress=await newaddProgress.save();
+//     res.json({message:"Add progress",savedProgress})
+//     }
+//     catch(e){
+//         res.json(e.message)
+//     }
+// })
+
+router.put('/hiringprogress/:id',async(req,res)=>{
+    console.log('server');
     let id=req.params.id
-    console.log(req.body);
-    const newaddProgress = new Progress(req.body)
-    const savedProgress=await newaddProgress.save();
-    res.json({message:"Add progress",savedProgress})
-    }
-    catch(e){
-        res.json(e.message)
-    }
+    console.log(id);
+    console.log(req.body)
+    let response=await Hiringrequest.findByIdAndUpdate(id,req.body,{new:true})
+    console.log(response);
+    res.json(response)
+
 })
 
-router.get('/viewfilmcompany/:id',async(req,res)=>{
-    try{
-        let id=req.params.id
-        console.log(req.body);
-        let response=await Announcement.find()
-        console.log(response)
-        let responsedata=[];
-        for(const newresponse of response){
-            let film=await Seekers.findById(newresponse.companyId)
-            responsedata.push({
-                companyName:film.companyName,
-                req:newresponse
-            })
-        }
-        console.log(responsedata);
-        res.json(responsedata)
-    }
-    catch(e){
-        res.json(e.message)
-    }
-})
+// router.get('/viewfilmcompany/:id',async(req,res)=>{
+//     try{
+//         let id=req.params.id
+//         console.log(req.body);
+//         let response=await Announcement.find()
+//         console.log(response)
+//         let responsedata=[];
+//         for(const newresponse of response){
+//             let film=await Seekers.findById(newresponse.companyId)
+//             responsedata.push({
+//                 companyName:film.companyName,
+//                 req:newresponse
+//             })
+//         }
+//         console.log(responsedata);
+//         res.json(responsedata)
+//     }
+//     catch(e){
+//         res.json(e.message)
+//     }
+// })
 
 export default router

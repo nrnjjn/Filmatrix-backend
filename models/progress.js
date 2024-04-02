@@ -12,7 +12,8 @@ const progressSchema=new Schema({
         ref:announcement
     },
     Progress:{
-        type:String
+        type:String,
+        deafult:"no update"
     },
     Date:{
         type:Date,

@@ -34,17 +34,30 @@ catch(e){
 }
 })
 
-router.post('/hiringfeedback',async(req,res)=>{
-    console.log(req.body);
-    const newHiringfeedback = new Hiringfeedback(req.body)
-    const savedHiringfeedback = await newHiringfeedback.save();
-    res.json({message:"Hiring Feedback",savedHiringfeedback})
+// router.post('/hiringfeedback',async(req,res)=>{
+//     console.log(req.body);
+//     const newHiringfeedback = new Hiringfeedback(req.body)
+//     const savedHiringfeedback = await newHiringfeedback.save();
+//     res.json({message:"Hiring Feedback",savedHiringfeedback})
+    
+// })
+
+router.put('/hiringfeedbackput/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id);
+    console.log(req.body)
+    let response=await Hiringrequest.findByIdAndUpdate(id,req.body,{new:true})
+    console.log(response);
+    res.json(response)
+
 })
+
 
 router.get('/viewanc/:id',async(req,res)=>{
     let id=req.params.id
     console.log(id);
     let response=await Announcement.find({companyId:id})
+    console.log(response);
     res.json(response)
 })
 
@@ -179,6 +192,27 @@ router.get('/viewlocfname/:id',async(req,res)=>{
 catch(e){
     res.json(e.message)
 }
+})
+
+
+router.get('/viewprogress/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(req.body);
+    let response=await Hiringrequest.find()
+    console.log(response)
+    // res.json(response)
+    let resposedata=[];
+    for (const newrespose of response){
+        let hiring=await Seekers.findById(newrespose.userId);
+        let anc=await Announcement.findById(newrespose.ancId);
+        resposedata.push({
+            hiring:hiring,
+            anc:anc,
+            req:newrespose
+        });
+    }
+    console.log(resposedata)
+    res.json(resposedata)
 })
 
 
