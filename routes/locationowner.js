@@ -21,19 +21,29 @@ router.post('/addlocation',upload.fields([{name:'Image'}]),async(req,res)=>{
 })
 
 router.get('/viewloc/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     let response=await Addlocation.find({userId:id})
     console.log(response)
     res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.get('/viewlocd/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     let response=await Addlocation.findById(id)
     console.log(response)
     res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.put('/editloc/:id',upload.fields([{name:'Image'}]),async(req,res)=>{

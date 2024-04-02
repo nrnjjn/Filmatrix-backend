@@ -21,17 +21,24 @@ router.post('/addjob',async(req,res)=>{
 })
 
 router.put('/editjob/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     console.log(req.body)
     let response=await Addjob.findByIdAndUpdate(id,req.body)
-    console.log(response);
+    console.log(response)
+    res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.get('/viewjob/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(req.body);
-    let response=await Addjob.find()
+    let response=await Addjob.find({userId:id})
     console.log(response)
     let responsedata=[];
     for(const newresponse of response){
@@ -43,6 +50,23 @@ router.get('/viewjob/:id',async(req,res)=>{
     }
     console.log(responsedata)
     res.json(responsedata)
+}
+catch(e){
+    res.json(e.message)
+}
+})
+
+router.get('/viewjobd/:id',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(id);
+    let response=await Addjob.findById(id)
+    console.log(response);
+    res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.get('/viewanc',async(req,res)=>{

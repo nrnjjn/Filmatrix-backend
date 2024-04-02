@@ -3,6 +3,8 @@ import Seekers from '../models/seekers.js'
 import Addpreviouswork from '../models/addpreviouswork.js'
 import Addjob from '../models/addjob.js'
 import { upload } from '../multer.js'
+import Jobrequest from '../models/jobrequest.js'
+import jobrequest from '../models/jobrequest.js'
 
 const router=express()
 
@@ -40,7 +42,7 @@ router.post('/login',async(req,res)=>{
     res.json(users)
 }
 catch(e){
-res.json(e.message)
+    res.json(e.message)
 }
 })
 
@@ -59,11 +61,16 @@ router.post('/addpreviouswork',upload.single('Image'),async(req,res)=>{
 })
 
 router.get('/viewpreviouswork/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id)
     let response=await Addpreviouswork.find({userId:id})
     console.log(response);
     res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.get('/viewpreviousworkd/:id',async(req,res)=>{
@@ -96,11 +103,16 @@ catch(e){
 })
 
 router.get('/viewprofile/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id)
     let response=await Seekers.findById(id)
     console.log(response);
     res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.put('/editprofile/:id',upload.fields([{name:'Liscence'}]),async(req,res)=>{
@@ -121,10 +133,29 @@ catch(e){
 })
 
 router.get('/viewjob',async(req,res)=>{
+    try{
     console.log(req.body);
     let response=await Addjob.find()
     console.log(response)
     res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+
+
+router.post('/postjobreq',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(req.body);
+    const newjobreq = new jobrequest(req.body)
+    const savedjobreq = await newjobreq.save();
+    res.json({message:"Job request",savedjobreq})
+    }
+    catch(e){
+        res.json(e.message)
+            }
 })
 
 export default router
