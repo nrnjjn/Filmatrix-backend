@@ -1,6 +1,5 @@
 import express from 'express'
 import announcement from '../models/announcement.js'
-import Hiringfeedback from '../models/hiringfeedback.js'
 import Announcement from '../models/announcement.js'
 import { upload } from '../multer.js'
 import Addlocation from '../models/addlocation.js'
@@ -63,7 +62,7 @@ router.get('/viewanc/:id',async(req,res)=>{
 
 router.get('/viewloc',async(req,res)=>{
     console.log(req.body);
-    let response=await Addlocation.find()
+    let response=await Addlocation.find({Status:'Accepted'})
     console.log(response)
     res.json(response)
 })

@@ -3,12 +3,24 @@ import Addlocation from '../models/addlocation.js'
 import { upload } from '../multer.js'
 const router=express()
 
-router.post('/addlocation',upload.fields([{name:'Image'}]),async(req,res)=>{
+router.post('/addlocation',upload.fields([{name:'Image'},{name:'Image2'},{name:'Image3'},{name:'Certificate'}]),async(req,res)=>{
     try{
-          
+          let id=req.params.id
     if(req.files['Image']){
         const image = req.files['Image'][0].filename
         req.body={...req.body,Image:image}
+    }
+    if(req.files['Image2']){
+        const image = req.files['Image2'][0].filename
+        req.body={...req.body,Image2:image}
+    }
+    if(req.files['Image3']){
+        const image = req.files['Image3'][0].filename
+        req.body={...req.body,Image3:image}
+    }
+    if(req.files['Certificate']){
+        const certificate = req.files['Certificate'][0].filename
+        req.body={...req.body,Certificate:certificate}
     }
         console.log(req.body)
         const newAddlocation = new Addlocation(req.body)
@@ -19,6 +31,7 @@ router.post('/addlocation',upload.fields([{name:'Image'}]),async(req,res)=>{
         res.json(e.message)
     }
 })
+
 
 router.get('/viewloc/:id',async(req,res)=>{
     try{

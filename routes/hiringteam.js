@@ -3,9 +3,9 @@ import Addjob from '../models/addjob.js';
 import Announcement from '../models/announcement.js';
 import Hiringrequest from '../models/hiringreq.js';
 import Locationreq from '../models/locationfcreq.js';
-import Progress from '../models/progress.js';
 import Addlocation from '../models/addlocation.js';
 import Seekers from '../models/seekers.js';
+import Payment from '../models/payment.js';
 const router=express()
 
 router.post('/addjob',async(req,res)=>{
@@ -82,11 +82,17 @@ router.get('/viewanc',async(req,res)=>{
 })
 
 router.get('/viewancd/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     let response=await Announcement.findById(id)
     console.log(response)
     res.json(response)
+}
+catch(e){
+    res.json()
+}
+
 })
 
 router.post('/posthiringreq',async(req,res)=>{
@@ -214,4 +220,16 @@ router.put('/hiringprogress/:id',async(req,res)=>{
 //     }
 // })
 
+router.post('/addpayment/:id',async(req,res)=>{
+    try{
+        let id=req.params.id
+        console.log(req.body);
+        const newpayment = new Payment(req.body)
+        const savedpayment = await newpayment.save();
+        res.json({message:"New payment",savedpayment})
+        }
+        catch(e){
+            res.json(e.message)
+                }
+})
 export default router

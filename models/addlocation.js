@@ -12,8 +12,21 @@ const addlocationSchema=new Schema({
     Image:{
         type:String
     },
+    Image2:{
+        type:String
+    },
+    Image3:{
+        type:String
+    },
     Description:{
         type:String,
+    },
+    Status:{
+        type:String,
+        default:'Pending'
+    },
+    Certificate:{
+        type:String
     }
   
     

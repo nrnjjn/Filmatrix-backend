@@ -1,5 +1,5 @@
 import mongoose, {Schema,model} from "mongoose";
-import Seekers from "./seekers";
+import Seekers from "./seekers.js";
 
 const paymentSchema=new Schema({
     hiringId:{
@@ -18,3 +18,6 @@ const paymentSchema=new Schema({
         default:'Pending'
     }
 })
+
+const Payment=model('payment',paymentSchema)
+export default Payment

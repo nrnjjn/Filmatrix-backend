@@ -3,7 +3,6 @@ import Seekers from '../models/seekers.js'
 import Addpreviouswork from '../models/addpreviouswork.js'
 import Addjob from '../models/addjob.js'
 import { upload } from '../multer.js'
-import Jobrequest from '../models/jobrequest.js'
 import jobrequest from '../models/jobrequest.js'
 
 const router=express()
