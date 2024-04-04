@@ -4,6 +4,7 @@ import Addpreviouswork from '../models/addpreviouswork.js'
 import Addjob from '../models/addjob.js'
 import { upload } from '../multer.js'
 import jobrequest from '../models/jobrequest.js'
+import Announcement from '../models/announcement.js'
 
 const router=express()
 
@@ -131,22 +132,27 @@ catch(e){
 }
 })
 
-router.get('/viewjob',async(req,res)=>{
+router.get('/viewjob/:id',async(req,res)=>{
     try{
+    let id=req.params.id
     console.log(req.body);
-    let response=await Addjob.find()
+    let response=await Addjob.find({ancId:id})
     console.log(response)
     res.json(response)
-    }
-    catch(e){
-        res.json(e.message)
-    }
+}
+catch(e){
+    res.json(e.message)
+}
 })
 
 
-router.post('/postjobreq',async(req,res)=>{
+router.post('/postjobreq',upload.fields([{name:'Cv'}]), async(req,res)=>{
     try{
     let id=req.params.id
+    if(req.files['Cv']){
+        const cv = req.files['Cv'][0].filename
+        req.body={...req.body,Cv:cv}
+    }
     console.log(req.body);
     const newjobreq = new jobrequest(req.body)
     const savedjobreq = await newjobreq.save();
@@ -155,6 +161,31 @@ router.post('/postjobreq',async(req,res)=>{
     catch(e){
         res.json(e.message)
             }
+})
+
+
+router.get('/jobreqst/:id',async(req,res)=>{
+    try{
+        let id=req.params.id
+    console.log(req.body);
+    let response=await jobrequest.find({sId:id})
+    console.log(response);
+    let responsedata=[];
+    for (const newresponse of response){
+        let job=await Addjob.findById(newresponse.jobId);
+        let film=await Announcement.findById(job.ancId);
+        responsedata.push({
+            film:film.Filmname,
+            job:job,
+            req:newresponse
+        })
+    }
+    console.log(responsedata)
+    res.json(responsedata)
+}
+catch(e){
+    res.json(e.message)
+}
 })
 
 export default router

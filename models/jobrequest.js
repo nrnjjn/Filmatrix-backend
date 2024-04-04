@@ -1,6 +1,7 @@
 import mongoose, {Schema,model} from "mongoose";
 import Seekers from "./seekers.js";
 import Addjob from "./addjob.js";
+import Announcement from "./announcement.js";
 
 const jobrequestSchema=new Schema({
     sId:{
@@ -12,11 +13,22 @@ const jobrequestSchema=new Schema({
         ref:Addjob
     },
     Status:{
-        type:String
+        type:String,
+        default:'Pending'
     },
     Date:{
         type:Date,
         default:Date.now
+    },
+    Cv:{
+        type:String
+    },
+    Description:{
+        type:String
+    },
+    ancId:{
+        type:mongoose.Types.ObjectId,
+        ref:Announcement
     }
 })
 

@@ -6,6 +6,8 @@ import Locationreq from '../models/locationfcreq.js';
 import Addlocation from '../models/addlocation.js';
 import Seekers from '../models/seekers.js';
 import Payment from '../models/payment.js';
+import jobrequest from '../models/jobrequest.js';
+import Addpreviouswork from '../models/addpreviouswork.js';
 const router=express()
 
 router.post('/addjob',async(req,res)=>{
@@ -231,5 +233,42 @@ router.post('/addpayment/:id',async(req,res)=>{
         catch(e){
             res.json(e.message)
                 }
+})
+
+router.get('/viewjobreq/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(req.body);
+    let response=await jobrequest.find()
+    console.log(response)
+    // res.json(response)
+    let resposedata=[];
+    for (const newrespose of response){
+        let seeker=await Seekers.findById(newrespose.sId);
+        let job=await Addjob.findById(newrespose.jobId);
+        let film=await Announcement.findById(job.ancId)
+        resposedata.push({
+            seeker:seeker,
+            job:job,
+            film:film,
+            req:newrespose
+        });
+    }
+    console.log(resposedata)
+    res.json(resposedata)
+})
+
+router.get('/viewpwk/:id',async(req,res)=>{
+    console.log(req.body);
+    let response=await Addpreviouswork.find()
+    console.log(response)
+    res.json(response)
+})
+
+router.get('/viewpwkd/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id);
+    let response=await Addpreviouswork.findById(id)
+    console.log(response)
+    res.json(response)
 })
 export default router
