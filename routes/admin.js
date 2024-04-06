@@ -1,6 +1,8 @@
 import express from 'express'
 import Seekers from '../models/seekers.js';
 import Addlocation from '../models/addlocation.js';
+import jobrequest from '../models/jobrequest.js';
+import Announcement from '../models/announcement.js';
 
 const router=express()
 
@@ -110,9 +112,20 @@ router.put('/managelocreq/:id',async(req,res)=>{
 router.get('/viewseekers',async(req,res)=>{
     try{
     console.log(req.body);
-    let response=await Seekers.find({userType:'seekers',Status:'Accepted'})
+    let response=await jobrequest.find({Status:'Accepted'})
     console.log(response);
-    res.json(response)
+    let responsedata=[];
+    for(const newresponse of response){
+        let user=await Seekers.findById(newresponse.sId)
+        let anc=await Announcement.findById(newresponse.ancId)
+        responsedata.push({
+            user:user,
+            anc:anc,
+            req:newresponse
+        })
+    }
+    console.log(responsedata);
+    res.json(responsedata)
     }
     catch(e){
         res.json(e.message)

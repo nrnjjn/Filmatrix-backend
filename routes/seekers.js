@@ -37,7 +37,8 @@ catch(e){
 router.post('/login',async(req,res)=>{
     try{
     console.log(req.body);
-    let users=await Seekers.findOne(req.body)
+    const {Email,Password}=req.body
+    let users=await Seekers.findOne({Email:Email,Password:Password})
     console.log(users)
     res.json(users)
 }

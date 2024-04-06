@@ -156,7 +156,7 @@ router.get('/viewhreq/:id',async(req,res)=>{
         let id=req.params.id
         console.log(id);
         let response=await Hiringrequest.find({userId:id})
-        console.log(response)
+        console.log(response)   
         let responsedata=[];
     for (const newresponse of response){
         let film=await Announcement.findById(newresponse.ancId);
@@ -236,26 +236,52 @@ router.post('/addpayment/:id',async(req,res)=>{
 })
 
 router.get('/viewjobreq/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(req.body);
-    let response=await jobrequest.find()
-    console.log(response)
+    let job=await Addjob.find({userId:id})
+    
+    // console.log({job,request})
     // res.json(response)
-    let resposedata=[];
-    for (const newrespose of response){
-        let seeker=await Seekers.findById(newrespose.sId);
-        let job=await Addjob.findById(newrespose.jobId);
-        let film=await Announcement.findById(job.ancId)
-        resposedata.push({
-            seeker:seeker,
-            job:job,
-            film:film,
-            req:newrespose
-        });
+    let responsedata=[];
+    for (const newresponse of job){
+        let request=await jobrequest.find({jobId:newresponse._id})
+        for(const j of request){
+            let seeker=await Seekers.findById(j.sId);
+            let jobb=await Addjob.findById(j.jobId);
+            let hiring=await Seekers.findById(jobb.userId)
+            let anc=await Announcement.findById(jobb.ancId)
+            responsedata.push({
+                seeker:seeker,
+                jobb:jobb,
+                hiring:hiring,
+                anc:anc,
+                status:j.Status,
+                date:j.Date,
+                
+            })
+        }
+        // console.log(request,'fghjednjenjne');
+    //     let film=await Announcement.findById(job.ancId)
+    //     let hiring=await Seekers.findById(job.userId)
+    // responsedata.push({
+    //         // seeker:seeker,
+    //         request:request
+    // //         film:film,
+    // //         hiring:hiring,
+    // //         req:newrespose
+    //     });
     }
-    console.log(resposedata)
-    res.json(resposedata)
+    // }
+    console.log(responsedata)
+    res.json(responsedata)
+}
+
+catch(e){
+    res.json(e.message)
+}
 })
+
 
 router.get('/viewpwk/:id',async(req,res)=>{
     console.log(req.body);

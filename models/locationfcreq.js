@@ -27,10 +27,9 @@ const locreqSchema = new Schema({
     Noofdays:{
         type:Number
     },
-    Filmname:{
-        type:mongoose.Types.ObjectId,
-        ref:announcement
-
+    total:{
+        type:Number,
+        default:0
     }
 })
 
