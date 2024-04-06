@@ -25,6 +25,8 @@ const  addjobSchema=new Schema({
         type:Date,
         default:Date.now
     }
+    
+
 
 })
 

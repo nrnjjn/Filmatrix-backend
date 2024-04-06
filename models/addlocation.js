@@ -27,6 +27,9 @@ const addlocationSchema=new Schema({
     },
     Certificate:{
         type:String
+    },
+    Priceperday:{
+        type:Number
     }
   
     

@@ -271,4 +271,13 @@ router.get('/viewpwkd/:id',async(req,res)=>{
     console.log(response)
     res.json(response)
 })
+
+router.put('/managejobreq/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id);
+    console.log(req.body)
+    let response=await jobrequest.findByIdAndUpdate(id,req.body)
+    console.log(response);
+})
+
 export default router
