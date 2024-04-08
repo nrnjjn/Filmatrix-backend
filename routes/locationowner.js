@@ -1,6 +1,7 @@
 import express from 'express'
 import Addlocation from '../models/addlocation.js'
 import { upload } from '../multer.js'
+import Payment from '../models/payment.js'
 const router=express()
 
 router.post('/addlocation',upload.fields([{name:'Image'},{name:'Image2'},{name:'Image3'},{name:'Certificate'}]),async(req,res)=>{
@@ -75,5 +76,29 @@ catch(e){
 }
 })
 
+router.get('/viewlocreq/:id',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(req.body);
+    let response=await Payment.find()
+    console.log(response)
+    // res.json(response)
+    let resposedata=[];
+    for (const newrespose of response){
+        let hiring=await Seekers.findById(newrespose.userId);
+        let anc=await Announcement.findById(newrespose.ancId);
+        resposedata.push({
+            hiring:hiring,
+            anc:anc,
+            req:newrespose
+        });
+    }
+    console.log(resposedata)
+    res.json(resposedata)
+}
+catch(e){
+    res.json(e.message)
+}
+})
 
 export default router

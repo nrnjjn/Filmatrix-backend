@@ -8,6 +8,7 @@ import Seekers from '../models/seekers.js';
 import Payment from '../models/payment.js';
 import jobrequest from '../models/jobrequest.js';
 import Addpreviouswork from '../models/addpreviouswork.js';
+import Locationbooking from '../models/locationbooking.js';
 const router=express()
 
 router.post('/addjob',async(req,res)=>{
@@ -21,6 +22,8 @@ router.post('/addjob',async(req,res)=>{
         res.json(e.message)
             }
 })
+
+
 
 router.put('/editjob/:id',async(req,res)=>{
     try{
@@ -151,6 +154,34 @@ catch(e){
 }
 })
 
+router.get('/viewlocreqd/:id',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(id);
+    let response=await Locationreq.findById(id)
+    console.log(response)
+    res.json(response)
+}
+catch(e){
+    res.json()
+}
+})
+
+
+router.post('/locationbooking',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(req.body);
+    const newLocationbooking = new Locationbooking(req.body)
+    const savedLocationbooking = await newLocationbooking.save();
+    res.json({message:"Location booking request",savedLocationbooking})
+    }
+    catch(e){
+        res.json(e.message)
+            }
+})
+
+
 router.get('/viewhreq/:id',async(req,res)=>{
     try{
         let id=req.params.id
@@ -176,20 +207,10 @@ router.get('/viewhreq/:id',async(req,res)=>{
 })
 
 
-// router.post('/addprogress',async(req,res)=>{
-//     try{
-//     let id=req.params.id
-//     console.log(req.body);
-//     const newaddProgress = new Progress(req.body)
-//     const savedProgress=await newaddProgress.save();
-//     res.json({message:"Add progress",savedProgress})
-//     }
-//     catch(e){
-//         res.json(e.message)
-//     }
-// })
+
 
 router.put('/hiringprogress/:id',async(req,res)=>{
+    try{
     console.log('server');
     let id=req.params.id
     console.log(id);
@@ -197,52 +218,63 @@ router.put('/hiringprogress/:id',async(req,res)=>{
     let response=await Hiringrequest.findByIdAndUpdate(id,req.body,{new:true})
     console.log(response);
     res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 
 })
 
-// router.get('/viewfilmcompany/:id',async(req,res)=>{
-//     try{
-//         let id=req.params.id
-//         console.log(req.body);
-//         let response=await Announcement.find()
-//         console.log(response)
-//         let responsedata=[];
-//         for(const newresponse of response){
-//             let film=await Seekers.findById(newresponse.companyId)
-//             responsedata.push({
-//                 companyName:film.companyName,
-//                 req:newresponse
-//             })
-//         }
-//         console.log(responsedata);
-//         res.json(responsedata)
-//     }
-//     catch(e){
-//         res.json(e.message)
-//     }
-// })
+router.get('/viewfilmprogress/:id',async(req,res)=>{
+    try{
+        let id=req.params.id
+    console.log(req.body);
+    let response=await Hiringrequest.find({userId:id})
+    console.log(response);
+    let responsedata=[];
+    for (const newresponse of response){
+        let film=await Announcement.findById(newresponse.ancId);
+        responsedata.push({
+            film:film,
+            req:newresponse
+        })
+    }
+    console.log(responsedata)
+    res.json(responsedata)
+}
+catch(e){
+    res.json(e.message)
+}
+})
 
 router.post('/addpayment/:id',async(req,res)=>{
     try{
-        let id=req.params.id
         console.log(req.body);
-        const newpayment = new Payment(req.body)
-        const savedpayment = await newpayment.save();
-        res.json({message:"New payment",savedpayment})
+
+        let data=await Addlocation.findById(req.body.locationownerId);
+
+        if(data){
+            let id=req.params.id
+            const newpayment = new Payment({...req.body,locationownerId:data.userId})
+            const savedpayment = await newpayment.save();
+            res.json({message:"New payment",savedpayment})
         }
-        catch(e){
-            res.json(e.message)
-                }
+
+      
+        }
+    catch(e)
+        {
+        res.json(e.message)
+        }
 })
+
+
 
 router.get('/viewjobreq/:id',async(req,res)=>{
     try{
     let id=req.params.id
     console.log(req.body);
     let job=await Addjob.find({userId:id})
-    
-    // console.log({job,request})
-    // res.json(response)
     let responsedata=[];
     for (const newresponse of job){
         let request=await jobrequest.find({jobId:newresponse._id})
@@ -258,52 +290,70 @@ router.get('/viewjobreq/:id',async(req,res)=>{
                 anc:anc,
                 status:j.Status,
                 date:j.Date,
+                req:j
                 
             })
         }
-        // console.log(request,'fghjednjenjne');
-    //     let film=await Announcement.findById(job.ancId)
-    //     let hiring=await Seekers.findById(job.userId)
-    // responsedata.push({
-    //         // seeker:seeker,
-    //         request:request
-    // //         film:film,
-    // //         hiring:hiring,
-    // //         req:newrespose
-    //     });
+
     }
-    // }
     console.log(responsedata)
     res.json(responsedata)
 }
-
 catch(e){
     res.json(e.message)
 }
 })
 
+router.get('/seekerreqd/:id',async(req,res)=>{
+    try{
+        let id=req.params.id;
+        console.log(id);
+        let response=await jobrequest.findById(id)
+        console.log(response);
+        let seeker=await Seekers.findById(response.sId)
+        res.json({response,seeker})
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
 
 router.get('/viewpwk/:id',async(req,res)=>{
+    try{
     console.log(req.body);
     let response=await Addpreviouswork.find()
     console.log(response)
     res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.get('/viewpwkd/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     let response=await Addpreviouswork.findById(id)
     console.log(response)
     res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.put('/managejobreq/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     console.log(req.body)
     let response=await jobrequest.findByIdAndUpdate(id,req.body)
     console.log(response);
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 export default router

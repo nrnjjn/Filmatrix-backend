@@ -10,11 +10,16 @@ const router=express()
 
 
 router.post('/addanc',upload.single('Image'),async(req,res)=>{
+    try{
     console.log(req.file)
     let imagepath=req.file.filename
     const newAnnouncement = new announcement({...req.body,Image:imagepath})
     const savedAnnouncement = await newAnnouncement.save();
     res.json({message:"New Announcement",savedAnnouncement})
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.put('/editanc/:id',upload.fields([{name:'Image'}]),async(req,res)=>{
@@ -33,49 +38,67 @@ catch(e){
 }
 })
 
-// router.post('/hiringfeedback',async(req,res)=>{
-//     console.log(req.body);
-//     const newHiringfeedback = new Hiringfeedback(req.body)
-//     const savedHiringfeedback = await newHiringfeedback.save();
-//     res.json({message:"Hiring Feedback",savedHiringfeedback})
-    
-// })
+router.delete('/deleteanc/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Announcement.findByIdAndDelete(id)
+})
 
 router.put('/hiringfeedbackput/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     console.log(req.body)
     let response=await Hiringrequest.findByIdAndUpdate(id,req.body,{new:true})
     console.log(response);
     res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 
 })
 
 
 router.get('/viewanc/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     let response=await Announcement.find({companyId:id})
     console.log(response);
     res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.get('/viewloc',async(req,res)=>{
+    try{
     console.log(req.body);
     let response=await Addlocation.find({Status:'Accepted'})
     console.log(response)
     res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.get('/viewlocd/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     let response=await Addlocation.findById(id)
     console.log(response)
     res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.get('/viewhiringreq/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(req.body);
     let response=await Hiringrequest.find()
@@ -93,9 +116,14 @@ router.get('/viewhiringreq/:id',async(req,res)=>{
     }
     console.log(resposedata)
     res.json(resposedata)
+}
+catch(e){
+    res.json(e.message)
+}
 })
 
 router.get('/viewhiringdetail/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     let response=await Hiringrequest.findById(id)
@@ -103,25 +131,41 @@ router.get('/viewhiringdetail/:id',async(req,res)=>{
     let hiring=await Seekers.findById(response.userId)
     let anc=await Announcement.findById(response.ancId)
     res.json({response,hiring,anc})
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.put('/manageHiring/:id',async (req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     console.log(req.body)
     let response=await Hiringrequest.findByIdAndUpdate(id,req.body)
     console.log(response);
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.put('/managelocreq/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     console.log(req.body)
     let response=await Locationreq.findByIdAndUpdate(id,req.body)
     console.log(response);
+    }
+    catch(e){
+        res.json(e.message)
+        }
+    
 })
 
 router.get('/viewlocreq/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(req.body);
     let response=await Locationreq.find()
@@ -141,9 +185,15 @@ router.get('/viewlocreq/:id',async(req,res)=>{
     }
     console.log(resposedata)
     res.json(resposedata)
+}
+catch(e){
+    res.json(e.message)
+
+}
 })
 
 router.get('/viewlocreqd/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(id);
     let response=await Locationreq.findById(id)
@@ -166,6 +216,10 @@ router.get('/viewlocreqd/:id',async(req,res)=>{
     // }
     // console.log(resposedata)
     // res.json(resposedata)
+    }
+    catch(e){
+        res.json(e.message)
+    }
 })
 
 router.get('/viewlocfname/:id',async(req,res)=>{
@@ -195,6 +249,7 @@ catch(e){
 
 
 router.get('/viewprogress/:id',async(req,res)=>{
+    try{
     let id=req.params.id
     console.log(req.body);
     let response=await Hiringrequest.find()
@@ -212,6 +267,10 @@ router.get('/viewprogress/:id',async(req,res)=>{
     }
     console.log(resposedata)
     res.json(resposedata)
+}
+catch(e){
+    res.json(e.message)
+}
 })
 
 

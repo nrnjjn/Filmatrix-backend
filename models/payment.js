@@ -13,6 +13,9 @@ const paymentSchema=new Schema({
     Amount:{
         type:String
     },
+    Paymentstatus:{
+        type:String
+    },
     Status:{
         type:String,
         default:'Pending'
