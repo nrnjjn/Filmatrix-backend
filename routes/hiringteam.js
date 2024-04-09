@@ -74,6 +74,11 @@ router.get('/viewjobd/:id',async(req,res)=>{
     }
 })
 
+router.delete('/deletejob/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Addjob.findByIdAndDelete(id)
+})
+
 router.get('/viewanc',async(req,res)=>{
     try{
     console.log(req.body);
@@ -222,8 +227,9 @@ router.put('/hiringprogress/:id',async(req,res)=>{
     catch(e){
         res.json(e.message)
     }
-
 })
+
+
 
 router.get('/viewfilmprogress/:id',async(req,res)=>{
     try{
@@ -343,17 +349,33 @@ router.get('/viewpwkd/:id',async(req,res)=>{
     }
 })
 
-router.put('/managejobreq/:id',async(req,res)=>{
-    try{
-    let id=req.params.id
-    console.log(id);
-    console.log(req.body)
-    let response=await jobrequest.findByIdAndUpdate(id,req.body)
-    console.log(response);
+router.put('/managejobreq/:id', async (req, res) => {
+    try {
+        let id = req.params.id;
+        console.log(id);
+        console.log(req.body, 'hskjhkjhkjhkjs');
+        let jobreq = await jobrequest.findById(id);
+        let response = await jobrequest.findByIdAndUpdate(id, req.body);
+        console.log(req.body, 'bodyyyyyy');
+        console.log(req.body.Status, '---------------');
+        console.log(jobreq, '=====================');
+
+        if (req.body.Status === 'Accepted') {
+            console.log('fffffffffff');
+            let newjob = await Addjob.findById(jobreq.jobId);
+            let updatedVacancy = newjob.Vacancy - 1;
+            if (updatedVacancy >= 0) {
+                let job = await Addjob.findByIdAndUpdate(jobreq.jobId, { Vacancy: updatedVacancy });
+                console.log(job, '---------------------------');
+            } else {
+                console.log('Vacancy cannot be negative');
+            }
+        }
+        console.log(response);
+    } catch (e) {
+        res.json(e.message);
     }
-    catch(e){
-        res.json(e.message)
-    }
-})
+});
+
 
 export default router

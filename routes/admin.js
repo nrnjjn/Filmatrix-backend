@@ -3,8 +3,11 @@ import Seekers from '../models/seekers.js';
 import Addlocation from '../models/addlocation.js';
 import jobrequest from '../models/jobrequest.js';
 import Announcement from '../models/announcement.js';
+import Addjob from '../models/addjob.js';
 
 const router=express()
+
+
 
 router.put('/acceptusers/:id',async(req,res)=>{
     try{
@@ -21,6 +24,7 @@ router.put('/acceptusers/:id',async(req,res)=>{
 
 
 
+
 router.get('/viewfilmcompany',async(req,res)=>{
     try{
     console.log(req.body);
@@ -33,6 +37,9 @@ router.get('/viewfilmcompany',async(req,res)=>{
     }
 
 })
+
+
+
 
 router.get('/viewhiringteam',async(req,res)=>{
     try{
@@ -47,6 +54,9 @@ router.get('/viewhiringteam',async(req,res)=>{
 
 })
 
+
+
+
 router.get('/viewlocationowner',async(req,res)=>{
     console.log(req.body);
     let response=await Seekers.find({userType:'locationowner'})
@@ -54,6 +64,9 @@ router.get('/viewlocationowner',async(req,res)=>{
     res.json(response)
 
 })
+
+
+
 
 router.get('/viewlocationreq',async(req,res)=>{
     try{
@@ -87,6 +100,9 @@ catch(e){
 }
 })
 
+
+
+
 router.get('/locationreqd/:id',async(req,res)=>{
     try{
         let id=req.params.id
@@ -101,6 +117,9 @@ router.get('/locationreqd/:id',async(req,res)=>{
     }
 })
 
+
+
+
 router.put('/managelocreq/:id',async(req,res)=>{
     let id=req.params.id
     console.log(id);
@@ -108,6 +127,9 @@ router.put('/managelocreq/:id',async(req,res)=>{
     let response=await Addlocation.findByIdAndUpdate(id,req.body)
     console.log(response);
 })
+
+
+
 
 router.get('/viewseekers',async(req,res)=>{
     try{
@@ -117,10 +139,16 @@ router.get('/viewseekers',async(req,res)=>{
     let responsedata=[];
     for(const newresponse of response){
         let user=await Seekers.findById(newresponse.sId)
-        let anc=await Announcement.findById(newresponse.ancId)
+        let job=await Addjob.findById(newresponse.jobId)
+        let anc=await Announcement.findById(job.ancId)
+        let fc=await Seekers.findById(anc.companyId)
+        let hiring=await Seekers.findById(job.userId)
         responsedata.push({
             user:user,
+            job:job,
             anc:anc,
+            fc:fc,
+            hiring:hiring,
             req:newresponse
         })
     }
@@ -132,5 +160,6 @@ router.get('/viewseekers',async(req,res)=>{
     }
 
 })
+
 
 export default router
