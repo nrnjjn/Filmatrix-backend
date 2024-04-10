@@ -80,6 +80,13 @@ catch(e){
 }
 })
 
+
+router.delete('/deletelocation/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Addlocation.findByIdAndDelete(id)
+})
+
+
 router.get('/viewlocreq/:id',async(req,res)=>{
     try{
     let id=req.params.id

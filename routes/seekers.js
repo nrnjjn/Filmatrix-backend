@@ -103,6 +103,11 @@ catch(e){
 }
 })
 
+router.delete('/deletepreviouswork/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Addpreviouswork.findByIdAndDelete(id)
+})
+
 router.get('/viewprofile/:id',async(req,res)=>{
     try{
     let id=req.params.id
@@ -189,8 +194,6 @@ router.get('/jobreqst/:id',async(req,res)=>{
         let job=await Addjob.findById(newresponse.jobId);
         console.log(job,'-==-=-===========');
         if(job){
-
-
             let film=await Announcement.findById(job.ancId);
             responsedata.push({
                 job:job,

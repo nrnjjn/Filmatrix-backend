@@ -128,7 +128,6 @@ router.post('/locreq',async(req,res)=>{
         const newLocreq = new Locationreq(req.body)
         const savedLocreq = await newLocreq.save();
         res.json({message:"Location request",savedLocreq})
- 
         }
         catch(e){
             res.json(e.message)
@@ -172,6 +171,21 @@ catch(e){
 }
 })
 
+
+router.put('/locationfeedback/:id',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(id);
+    console.log(req.body)
+    let response=await Locationbooking.findByIdAndUpdate(id,req.body,{new:true})
+    console.log(response);
+    res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
+
+})
 
 router.post('/locationbooking',async(req,res)=>{
     try{
@@ -385,7 +399,6 @@ router.put('/managejobreq/:id', async (req, res) => {
         console.log(req.body, 'bodyyyyyy');
         console.log(req.body.Status, '---------------');
         console.log(jobreq, '=====================');
-
         if (req.body.Status === 'Accepted') {
             console.log('fffffffffff');
             let newjob = await Addjob.findById(jobreq.jobId);
