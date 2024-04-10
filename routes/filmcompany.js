@@ -274,4 +274,54 @@ catch(e){
 })
 
 
+
+
+
+
+
+
+
+// router.get('/viewsponshistory/:id', async (req, res) => {
+//     let id = req.params.id;
+//     console.log(id);
+//     let events = await Event.find({ orphanageId: id });
+//     console.log(events);
+//     let responseData = [];
+//     let processedEvents = new Set(); // Set to track processed event IDs
+
+//     for (let x of events) {
+//         // Check if the event is already processed
+//         if (processedEvents.has(x._id)) {
+//             continue; // Skip processing if the event is already processed
+//         }
+
+//         let eventProcessed = false;
+
+//         let purposes = await Purpose.find({ eventId: x._id });
+//         for (let y of purposes) {
+//             let sponsor = await Sponsosrship.find({ purposeId: y._id });
+//             for (let z of sponsor) {
+//                 let organizations = await User.findById(z.organizationId);
+//                 responseData.push({
+//                     purpose: y,
+//                     sponsor: z,
+//                     organization: organizations,
+//                     event: x
+//                 });
+//                 eventProcessed = true;
+//             }
+//         }
+
+//         // If at least one purpose was found for the event, mark the event as processed
+//         if (eventProcessed) {
+//             processedEvents.add(x._id);
+//         }
+//     }
+//     console.log(responseData);
+//     res.json(responseData);
+// });
+
+
+
+
 export default router

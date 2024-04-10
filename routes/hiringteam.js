@@ -186,6 +186,32 @@ router.post('/locationbooking',async(req,res)=>{
             }
 })
 
+router.get('/viewlocationbooking/:id',async(req,res)=>{
+    try{
+        let id=req.params.id
+        let response=await Locationbooking.find({hiringId:id})
+        console.log(response);
+        let responsedata=[];
+        for (const newresponse of response){
+            let film=await Announcement.findById(newresponse.ancId);
+            let loc=await Addlocation.findById(newresponse.locationId);
+            let fcreq=await Locationreq.findById(newresponse.Fcreq)
+            responsedata.push({
+                film:film,
+                loc:loc,
+                fcreq:fcreq,
+                req:newresponse
+            })
+    }
+    console.log(responsedata)
+    res.json(responsedata)
+}
+    catch(e){
+        res.json(e.message)
+    }
+})
+
+
 
 router.get('/viewhreq/:id',async(req,res)=>{
     try{

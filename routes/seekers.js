@@ -147,22 +147,34 @@ catch(e){
 })
 
 
-router.post('/postjobreq',upload.fields([{name:'Cv'}]), async(req,res)=>{
-    try{
-    let id=req.params.id
-    if(req.files['Cv']){
-        const cv = req.files['Cv'][0].filename
-        req.body={...req.body,Cv:cv}
-    }
-    console.log(req.body);
-    const newjobreq = new jobrequest(req.body)
-    const savedjobreq = await newjobreq.save();
-    res.json({message:"Job request",savedjobreq})
-    }
-    catch(e){
-        res.json(e.message)
+router.post('/postjobreq', upload.fields([{ name: 'Cv' }]), async (req, res) => {
+    try {
+        const seekerId = req.body.sId;
+        const jobId = req.body.jobId;
+
+        // Check if the seeker has already applied for the same job
+        const existingJobRequest = await jobrequest.findOne({ sId: seekerId, jobId: jobId });
+        if (existingJobRequest) {
+           throw new Error ('already exist')
+        }
+
+        // Proceed with saving the job request if it's a new application
+        else{
+            
+            if (req.files['Cv']) {
+                const cv = req.files['Cv'][0].filename;
+                req.body = { ...req.body, Cv: cv };
             }
-})
+            
+            const newjobreq = new jobrequest(req.body);
+            const savedjobreq = await newjobreq.save();
+            res.json({ message: "Job request", savedjobreq });
+        }
+        } catch (e) {
+            res.status(500).json({ message: e.message });
+    }
+});
+
 
 
 router.get('/jobreqst/:id',async(req,res)=>{
@@ -170,16 +182,22 @@ router.get('/jobreqst/:id',async(req,res)=>{
         let id=req.params.id
     console.log(req.body);
     let response=await jobrequest.find({sId:id})
-    console.log(response);
+    console.log(response,'======================');
     let responsedata=[];
     for (const newresponse of response){
+        console.log(newresponse.jobId);
         let job=await Addjob.findById(newresponse.jobId);
-        let film=await Announcement.findById(job.ancId);
-        responsedata.push({
-            film:film.Filmname,
-            job:job,
-            req:newresponse
-        })
+        console.log(job,'-==-=-===========');
+        if(job){
+
+
+            let film=await Announcement.findById(job.ancId);
+            responsedata.push({
+                job:job,
+                film:film,
+                req:newresponse
+            })
+        }
     }
     console.log(responsedata)
     res.json(responsedata)

@@ -2,6 +2,10 @@ import express from 'express'
 import Addlocation from '../models/addlocation.js'
 import { upload } from '../multer.js'
 import Payment from '../models/payment.js'
+import Locationbooking from '../models/locationbooking.js'
+import Announcement from '../models/announcement.js'
+import Seekers from '../models/seekers.js'
+import Locationreq from '../models/locationfcreq.js'
 const router=express()
 
 router.post('/addlocation',upload.fields([{name:'Image'},{name:'Image2'},{name:'Image3'},{name:'Certificate'}]),async(req,res)=>{
@@ -79,26 +83,49 @@ catch(e){
 router.get('/viewlocreq/:id',async(req,res)=>{
     try{
     let id=req.params.id
-    console.log(req.body);
-    let response=await Payment.find()
-    console.log(response)
-    // res.json(response)
+    let location=await Addlocation.find({userId:id});
+    console.log(location,'----------------');
     let resposedata=[];
+    for(const x of location){
+    let response=await Locationbooking.find({locationId:x._id})
+    console.log(response,'zzzzzzzzzzzzzzzzzzz')
     for (const newrespose of response){
-        let hiring=await Seekers.findById(newrespose.userId);
+        let loc=await Addlocation.findById(newrespose.locationId);
         let anc=await Announcement.findById(newrespose.ancId);
+        let hiring=await Seekers.findById(newrespose.hiringId);
+        let fcreq=await Locationreq.findById(newrespose.Fcreq);
         resposedata.push({
-            hiring:hiring,
             anc:anc,
+            loc:loc,
+            fcreq:fcreq,
+            hiring:hiring,
             req:newrespose
         });
-    }
+    }}
     console.log(resposedata)
     res.json(resposedata)
+
 }
 catch(e){
     res.json(e.message)
 }
 })
+
+
+router.put('/managebookings/:id',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(id);
+    console.log(req.body)
+    let response=await Locationbooking.findByIdAndUpdate(id,req.body)
+    console.log(response);
+    res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+        }
+    
+})
+
 
 export default router

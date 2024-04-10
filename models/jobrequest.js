@@ -8,7 +8,6 @@ const jobrequestSchema=new Schema({
         type:mongoose.Types.ObjectId,
         ref:Seekers
     },
-   
     jobId:{
         type:mongoose.Types.ObjectId,
         ref:Addjob
