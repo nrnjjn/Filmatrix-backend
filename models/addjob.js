@@ -20,6 +20,8 @@ const  addjobSchema=new Schema({
     },
     Description:{
         type:String,
+    },  category:{
+        type:mongoose.Types.ObjectId,
     },
     Date:{
         type:Date,

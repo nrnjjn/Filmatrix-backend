@@ -16,10 +16,7 @@ const paymentSchema=new Schema({
     Paymentstatus:{
         type:String
     },
-    Status:{
-        type:String,
-        default:'Pending'
-    }
+  
 })
 
 const Payment=model('payment',paymentSchema)

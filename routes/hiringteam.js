@@ -162,9 +162,10 @@ router.get('/viewlocreqd/:id',async(req,res)=>{
     try{
     let id=req.params.id
     console.log(id);
-    let response=await Locationreq.findById(id)
+    let response=await Locationbooking.findById(id)
+    let fcreq=await Locationreq.findById(response.Fcreq)
     console.log(response)
-    res.json(response)
+    res.json({response,fcreq})
 }
 catch(e){
     res.json()

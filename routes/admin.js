@@ -4,6 +4,7 @@ import Addlocation from '../models/addlocation.js';
 import jobrequest from '../models/jobrequest.js';
 import Announcement from '../models/announcement.js';
 import Addjob from '../models/addjob.js';
+import category from '../models/category.js';
 
 const router=express()
 
@@ -16,6 +17,54 @@ router.put('/acceptusers/:id',async(req,res)=>{
     console.log(req.body);
     let response=await Seekers.findByIdAndUpdate(id,req.body)
     console.log(response);
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+
+router.post('/createcategory',async(req,res)=>{
+    try{
+        console.log(req.body);
+    let response=new category({name:req.body.category})
+
+    let ress = await response.save()
+    res.json(ress)
+
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+
+router.get('/viewcategory',async(req,res)=>{
+    try{
+    let response=await category.find()
+
+    res.json(response)
+
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+router.delete('/viewcategory/:id',async(req,res)=>{
+    try{
+    let response=await category.findByIdAndDelete(req.params.id)
+
+    res.json(response)
+
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+router.put('/viewcategory/:id',async(req,res)=>{
+    try{
+    let response=category.findByIdAndUpdate(req.params.id,{$set:req.body})
+
+    res.json(response)
+
     }
     catch(e){
         res.json(e.message)

@@ -5,6 +5,7 @@ import Addjob from '../models/addjob.js'
 import { upload } from '../multer.js'
 import jobrequest from '../models/jobrequest.js'
 import Announcement from '../models/announcement.js'
+import mongoose from 'mongoose'
 
 const router=express()
 
@@ -151,6 +152,18 @@ catch(e){
 }
 })
 
+router.get('/viewjobbycatid/:id',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(req.body);
+    let response=await Addjob.find({category:new mongoose.Types.ObjectId(id)})
+    console.log(response)
+    res.json(response)
+}
+catch(e){
+    res.json(e.message)
+}
+})
 
 router.post('/postjobreq', upload.fields([{ name: 'Cv' }]), async (req, res) => {
     try {
