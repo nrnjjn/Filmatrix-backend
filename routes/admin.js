@@ -59,6 +59,7 @@ router.delete('/viewcategory/:id',async(req,res)=>{
         res.json(e.message)
     }
 })
+
 router.put('/viewcategory/:id',async(req,res)=>{
     try{
     let response=category.findByIdAndUpdate(req.params.id,{$set:req.body})

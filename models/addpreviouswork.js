@@ -8,7 +8,6 @@ const previousworkSchema=new Schema({
     },
     Job:{
         type:String,
-       
     },
     Description:{
         type:String,

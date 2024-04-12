@@ -48,6 +48,14 @@ catch(e){
 }
 })
 
+
+router.post('/api/auth/authenticate',async (req,res)=>{
+    console.log(req.body);
+    let response=await  Seekers.findOne(req.body)
+    console.log(response);
+    res.json(response)
+})
+
 router.post('/addpreviouswork',upload.single('Image'),async(req,res)=>{
     try{
         console.log(req.file);
