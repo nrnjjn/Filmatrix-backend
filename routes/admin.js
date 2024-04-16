@@ -188,11 +188,11 @@ router.get('/viewseekers',async(req,res)=>{
     console.log(response);
     let responsedata=[];
     for(const newresponse of response){
-        let user=await Seekers.findById(newresponse.sId)
-        let job=await Addjob.findById(newresponse.jobId)
-        let anc=await Announcement.findById(job.ancId)
-        let fc=await Seekers.findById(anc.companyId)
-        let hiring=await Seekers.findById(job.userId)
+        let user=await Seekers.findById(newresponse?.sId)
+        let job=await Addjob.findById(newresponse?.jobId)
+        let anc=await Announcement.findById(job?.ancId)
+        let fc=await Seekers.findById(anc?.companyId)
+        let hiring=await Seekers.findById(job?.userId)
         responsedata.push({
             user:user,
             job:job,

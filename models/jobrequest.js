@@ -10,7 +10,7 @@ const jobrequestSchema=new Schema({
     },
     jobId:{
         type:mongoose.Types.ObjectId,
-        ref:Addjob
+        
     },
     Status:{
         type:String,
@@ -31,6 +31,8 @@ const jobrequestSchema=new Schema({
         ref:Announcement
     }
 })
+
+
 
 const jobrequest=model('Jobrequest',jobrequestSchema)
 export default jobrequest

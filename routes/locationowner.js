@@ -135,4 +135,16 @@ router.put('/managebookings/:id',async(req,res)=>{
 })
 
 
+router.get('/viewpayment/:id',async(req,res)=>{
+    try{
+        let id=req.params.id
+        console.log(id,'-----Location owner id-----');
+        console.log(req.body);
+        let response=await Locationbooking(find)
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+
 export default router

@@ -210,7 +210,7 @@ router.get('/viewlocationbooking/:id',async(req,res)=>{
         for (const newresponse of response){
             let film=await Announcement.findById(newresponse.ancId);
             let loc=await Addlocation.findById(newresponse.locationId);
-            let fcreq=await Locationreq.findById(newresponse.Fcreq)
+            let fcreq=await Locationreq.findById(newresponse.Fcreq);
             responsedata.push({
                 film:film,
                 loc:loc,
@@ -294,26 +294,33 @@ catch(e){
 }
 })
 
-router.post('/addpayment/:id',async(req,res)=>{
-    try{
-        console.log(req.body);
-
-        let data=await Addlocation.findById(req.body.locationownerId);
-
-        if(data){
-            let id=req.params.id
-            const newpayment = new Payment({...req.body,locationownerId:data.userId})
-            const savedpayment = await newpayment.save();
-            res.json({message:"New payment",savedpayment})
-        }
-
-      
-        }
-    catch(e)
-        {
-        res.json(e.message)
-        }
+router.put('/payment/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id);
+    console.log(req.body);
+    let response=await Locationbooking.findByIdAndUpdate(id,req.body,{new:true})
+    console.log(response);
 })
+
+
+// router.post('/addpayment/:id',async(req,res)=>{
+//     try{
+//         console.log(req.body);
+
+//         let data=await Addlocation.findById(req.body.locationownerId);
+
+//         if(data){
+//             let id=req.params.id
+//             const newpayment = new Payment({...req.body,locationownerId:data.userId})
+//             const savedpayment = await newpayment.save();
+//             res.json({message:"New payment",savedpayment})
+//         }
+//         }
+//     catch(e)
+//         {
+//         res.json(e.message)
+//         }
+// })
 
 
 

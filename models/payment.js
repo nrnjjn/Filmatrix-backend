@@ -1,5 +1,6 @@
 import mongoose, {Schema,model} from "mongoose";
 import Seekers from "./seekers.js";
+import Locationbooking from "./locationbooking.js";
 
 const paymentSchema=new Schema({
     hiringId:{
@@ -9,6 +10,10 @@ const paymentSchema=new Schema({
     locationownerId:{
         type:mongoose.Types.ObjectId,
         ref:Seekers
+    },
+    bookingId:{
+        type:mongoose.Types.ObjectId,
+        ref:Locationbooking
     },
     Amount:{
         type:String
