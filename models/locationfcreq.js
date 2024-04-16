@@ -33,5 +33,16 @@ const locreqSchema = new Schema({
     }
 })
 
+locreqSchema.pre('findOneAndDelete', async function (next) {
+    try {
+        const announcementId = this._conditions.Filmname; // Get the ID of the announcement being deleted
+        await this.model.deleteMany({ Filmname: announcementId }); // Delete all location requests associated with the announcement
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 const Locationreq=model('locreq',locreqSchema)
 export default Locationreq

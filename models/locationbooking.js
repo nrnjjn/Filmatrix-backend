@@ -45,5 +45,17 @@ const postlocreqSchema = new Schema({
     }
 
 })
+
+postlocreqSchema.pre('findOneAndDelete', async function (next) {
+    try {
+        const announcementId = this._conditions.ancId; // Get the ID of the announcement being deleted
+        await this.model.deleteMany({ ancId: announcementId }); // Delete all location bookings associated with the announcement
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 const Locationbooking=model('locationbooking',postlocreqSchema)
 export default Locationbooking;

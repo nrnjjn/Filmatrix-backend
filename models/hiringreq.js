@@ -31,5 +31,16 @@ const hiringreqSchema=new Schema({
     }
 })
 
+hiringreqSchema.pre('findOneAndDelete', async function (next) {
+    try {
+        const announcementId = this._conditions.ancId; // Get the ID of the announcement being deleted
+        await this.model.deleteMany({ ancId: announcementId }); // Delete all hiring requests associated with the announcement
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 const Hiringrequest=model('hiringreq',hiringreqSchema)
 export default Hiringrequest

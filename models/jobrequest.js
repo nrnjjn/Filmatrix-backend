@@ -32,6 +32,15 @@ const jobrequestSchema=new Schema({
     }
 })
 
+jobrequestSchema.pre('findOneAndDelete', async function (next) {
+    try {
+        const announcementId = this._conditions.ancId; // Get the ID of the announcement being deleted
+        await this.model.deleteMany({ ancId: announcementId }); // Delete all job requests associated with the announcement
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
 
 
 const jobrequest=model('Jobrequest',jobrequestSchema)
