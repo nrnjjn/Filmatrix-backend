@@ -6,7 +6,9 @@ const seekersSchema = new Schema({
     },
     Email:{
         type:String,
-        required:true
+        required:true,
+        unique:true
+        
     },
     Phone:{
         type:Number,
@@ -37,7 +39,7 @@ const seekersSchema = new Schema({
         type:String
     },
     liscenceNo:{
-        type:String
+        type:Number
     },
     userType:{
         type:String

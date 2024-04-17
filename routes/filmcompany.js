@@ -100,20 +100,24 @@ router.get('/viewlocd/:id',async(req,res)=>{
 router.get('/viewhiringreq/:id',async(req,res)=>{
     try{
     let id=req.params.id
+    console.log(id);
     console.log(req.body);
-    let response=await Hiringrequest.find()
-    console.log(response)
+    let filmcompany=await Announcement.find({companyId:id})
+    console.log(filmcompany,'----------');
     // res.json(response)
     let resposedata=[];
-    for (const newrespose of response){
-        let hiring=await Seekers.findById(newrespose.userId);
-        let anc=await Announcement.findById(newrespose.ancId);
+    for (const x of filmcompany){
+        let response=await Hiringrequest.find({ancId:x._id})
+        console.log(response,'xxxxxxxxxxxxxxxxx');
+        for(const newresponse of response){
+        let hiring=await Seekers.findById(newresponse.userId);
+        let anc=await Announcement.findById(newresponse.ancId);
         resposedata.push({
             hiring:hiring,
             anc:anc,
-            req:newrespose
+            req:newresponse
         });
-    }
+    }}
     console.log(resposedata)
     res.json(resposedata)
 }
@@ -121,6 +125,10 @@ catch(e){
     res.json(e.message)
 }
 })
+
+
+
+
 
 router.get('/viewhiringdetail/:id',async(req,res)=>{
     try{
@@ -164,33 +172,36 @@ router.put('/managelocreq/:id',async(req,res)=>{
     
 })
 
-router.get('/viewlocreq/:id',async(req,res)=>{
-    try{
-    let id=req.params.id
-    console.log(req.body);
-    let response=await Locationreq.find()
-    console.log(response)
-    // res.json(response)
-    let resposedata=[];
-    for (const newrespose of response){
-        let hiring=await Seekers.findById(newrespose.hiringId);
-        let anc=await Announcement.findById(newrespose.Filmname);
-        let loc=await Addlocation.findById(newrespose.locationId)
-        resposedata.push({
-            hiring:hiring,
-            anc:anc,
-            loc:loc,
-            req:newrespose
-        });
-    }
-    console.log(resposedata)
-    res.json(resposedata)
-}
-catch(e){
-    res.json(e.message)
+router.get('/viewlocreq/:id', async (req, res) => {
+    try {
+        let id = req.params.id;
+        let response = await announcement.find({ companyId: id });
+        let resposedata = [];
 
-}
-})
+        for (const newresponse of response) {
+            let reqs = await Locationreq.find({ Filmname: newresponse.id });
+            let announcements = [];
+
+            for (const req of reqs) {
+                let hiring = await Seekers.findById(req.hiringId);
+                let loc = await Addlocation.findById(req.locationId);
+                announcements.push({
+                    hiring: hiring,
+                    anc: newresponse,
+                    loc: loc,
+                    req: req
+                });
+            }
+
+            resposedata.push(announcements);
+        }
+
+        console.log(resposedata);
+        res.json(resposedata);
+    } catch (e) {
+        res.json(e.message);
+    }
+});
 
 router.get('/viewlocreqd/:id',async(req,res)=>{
     try{

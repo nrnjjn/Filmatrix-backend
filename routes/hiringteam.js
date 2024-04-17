@@ -397,30 +397,68 @@ router.get('/viewpwkd/:id',async(req,res)=>{
     }
 })
 
+// router.put('/managejobreq/:id', async (req, res) => {
+//     try {
+//         let id = req.params.id;
+//         console.log(id);
+//         console.log(req.body, 'hskjhkjhkjhkjs');
+//         let jobreq = await jobrequest.findById(id);
+//         let response = await jobrequest.findByIdAndUpdate(id, req.body);
+//         console.log(req.body, 'bodyyyyyy');
+//         console.log(req.body.Status, '---------------');
+//         console.log(jobreq, '=====================');
+//         if (req.body.Status === 'Accepted') {
+//             console.log('fffffffffff');
+//             let newjob = await Addjob.findById(jobreq.jobId);
+//             let updatedVacancy = newjob.Vacancy - 1;
+//             if (updatedVacancy >= 0) {
+//                 let job = await Addjob.findByIdAndUpdate(jobreq.jobId, { Vacancy: updatedVacancy });
+//                 console.log(job, '---------------------------');
+//             } else {
+//                 console.log('Vacancy cannot be negative');
+//             }
+//         }
+//         console.log(response);
+//     } catch (e) {
+//         res.json(e.message);
+//     }
+// });
+
+
 router.put('/managejobreq/:id', async (req, res) => {
     try {
-        let id = req.params.id;
-        console.log(id);
-        console.log(req.body, 'hskjhkjhkjhkjs');
-        let jobreq = await jobrequest.findById(id);
-        let response = await jobrequest.findByIdAndUpdate(id, req.body);
-        console.log(req.body, 'bodyyyyyy');
-        console.log(req.body.Status, '---------------');
-        console.log(jobreq, '=====================');
-        if (req.body.Status === 'Accepted') {
-            console.log('fffffffffff');
-            let newjob = await Addjob.findById(jobreq.jobId);
-            let updatedVacancy = newjob.Vacancy - 1;
-            if (updatedVacancy >= 0) {
-                let job = await Addjob.findByIdAndUpdate(jobreq.jobId, { Vacancy: updatedVacancy });
-                console.log(job, '---------------------------');
-            } else {
-                console.log('Vacancy cannot be negative');
-            }
+        const id = req.params.id;
+        const jobReqData = req.body;
+        
+        // Update the job request
+        const updatedJobReq = await jobrequest.findByIdAndUpdate(id, jobReqData, { new: true });
+        
+        if (!updatedJobReq) {
+            return res.status(404).json({ error: 'Job request not found' });
         }
-        console.log(response);
-    } catch (e) {
-        res.json(e.message);
+
+        // Check if status is 'Accepted'
+        if (jobReqData.Status === 'Accepted') {
+            // Find the corresponding job
+            const newJob = await Addjob.findById(updatedJobReq.jobId);
+            if (!newJob) {
+                return res.status(404).json({ error: 'Job not found' });
+            }
+            
+            // Decrease the job's vacancy count
+            newJob.Vacancy -= 1;
+            if (newJob.Vacancy < 0) {
+                return res.status(400).json({ error: 'Vacancy cannot be negative' });
+            }
+
+            // Save the updated job
+            await newJob.save();
+        }
+
+        res.json(updatedJobReq);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 

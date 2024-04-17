@@ -23,6 +23,9 @@ const jobrequestSchema=new Schema({
     Cv:{
         type:String
     },
+    File:{
+        type:String
+    },
     Description:{
         type:String
     },

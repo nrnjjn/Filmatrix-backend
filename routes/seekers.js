@@ -24,6 +24,10 @@ router.post('/register',upload.fields([{name:'Idproof'},{name:"Liscence"}]),asyn
         console.log(liscence)
         req.body={...req.body,Liscence:liscence}
     }
+    const existMail=await Seekers.findOne({Email:req.body.Email})
+    if(existMail){
+        return res.status(400).json({message:'mail exist'})
+    }
     const newSeekers = new Seekers(req.body)
     const savedSeekers = await newSeekers.save();
     console.log(newSeekers,'new user');
@@ -165,8 +169,17 @@ router.get('/viewjobbycatid/:id',async(req,res)=>{
     let id=req.params.id
     console.log(req.body);
     let response=await Addjob.find({category:new mongoose.Types.ObjectId(id)})
-    console.log(response)
-    res.json(response)
+    let responsedata=[];
+    for(const newresponse of response){
+        let film=await Announcement.findById(newresponse.ancId)
+        responsedata.push({
+            film:film,
+            req:newresponse
+
+        })
+    }
+    console.log(responsedata)
+    res.json(responsedata)
 }
 catch(e){
     res.json(e.message)
