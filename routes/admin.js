@@ -190,6 +190,7 @@ router.get('/viewseekers',async(req,res)=>{
     for(const newresponse of response){
         let user=await Seekers.findById(newresponse?.sId)
         let job=await Addjob.findById(newresponse?.jobId)
+        let cat=await category.findById(job?.category)
         let anc=await Announcement.findById(job?.ancId)
         let fc=await Seekers.findById(anc?.companyId)
         let hiring=await Seekers.findById(job?.userId)
@@ -198,6 +199,7 @@ router.get('/viewseekers',async(req,res)=>{
             job:job,
             anc:anc,
             fc:fc,
+            cat:cat,
             hiring:hiring,
             req:newresponse
         })
