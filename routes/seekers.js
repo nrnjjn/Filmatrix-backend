@@ -186,7 +186,7 @@ catch(e){
 }
 })
 
-router.post('/postjobreq', upload.fields([{ name: 'Cv' }]), async (req, res) => {
+router.post('/postjobreq', upload.fields([{ name: 'Cv' },{ name: 'File' }]), async (req, res) => {
     try {
         const seekerId = req.body.sId;
         const jobId = req.body.jobId;
@@ -205,6 +205,10 @@ router.post('/postjobreq', upload.fields([{ name: 'Cv' }]), async (req, res) => 
                 req.body = { ...req.body, Cv: cv };
             }
             
+            if (req.files['File']) {
+                const File = req.files['File'][0].filename;
+                req.body = { ...req.body, File: File };
+            }
             const newjobreq = new jobrequest(req.body);
             const savedjobreq = await newjobreq.save();
             res.json({ message: "Job request", savedjobreq });
