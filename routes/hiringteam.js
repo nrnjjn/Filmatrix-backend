@@ -9,6 +9,8 @@ import Payment from '../models/payment.js';
 import jobrequest from '../models/jobrequest.js';
 import Addpreviouswork from '../models/addpreviouswork.js';
 import Locationbooking from '../models/locationbooking.js';
+import { upload } from '../multer.js';
+import Hiringpreviouswork from '../models/hiringpreviouswork.js';
 const router=express()
 
 router.post('/addjob',async(req,res)=>{
@@ -463,4 +465,63 @@ router.put('/managejobreq/:id', async (req, res) => {
 });
 
 
+router.post('/addpwk',upload.single('Image'),async(req,res)=>{
+    try{
+        console.log(req.file);
+        let imagepath=req.file.filename
+        const newPreviouswork = new Hiringpreviouswork({...req.body,Image:imagepath})
+        const savedPreviouswork = await newPreviouswork.save()
+        res.json({message:"Previous Work",savedPreviouswork})
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+
+router.get('/viewpreviouswork/:id',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(id)
+    let response=await Hiringpreviouswork.find({userId:id})
+    console.log(response);
+    res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+
+router.get('/viewpreviousworkd/:id',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(id);
+    let response=await Hiringpreviouswork.findById(id)
+    console.log(response)
+    res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+
+router.put('/editpreviouswork/:id',upload.fields([{name:'Image'}]),async(req,res)=>{
+    try{
+    if(req.files['Image']){
+        const image =  req.files['Image'][0].filename;  
+        console.log(image)
+        req.body={...req.body,Image:image}
+    }
+    let id=req.params.id
+    console.log(req.body)
+    let response=await Hiringpreviouswork.findByIdAndUpdate(id,req.body)
+}
+catch(e){
+    res.json(e.message)
+}
+})
+
+router.delete('/deletepreviouswork/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Hiringpreviouswork.findByIdAndDelete(id)
+})
 export default router

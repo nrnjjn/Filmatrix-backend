@@ -12,6 +12,15 @@ const hiringpreviousworkSchema=new Schema({
     Genre:{
         type:String
     },
+    Director:{
+        type:String
+    },
+    Producer:{
+        type:String
+    },
+    Productionhouse:{
+        type:String
+    },
     Description:{
         type:String,
     },
