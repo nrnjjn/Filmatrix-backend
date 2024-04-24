@@ -6,6 +6,8 @@ import Addlocation from '../models/addlocation.js'
 import Seekers from '../models/seekers.js'
 import Hiringrequest from '../models/hiringreq.js'
 import Locationreq from '../models/locationfcreq.js'
+import jobrequest from '../models/jobrequest.js'
+import Addjob from '../models/addjob.js'
 const router=express()
 
 
@@ -243,9 +245,11 @@ router.get('/viewlocfname/:id',async(req,res)=>{
     for (const newrespose of response){
         let anc=await Announcement.findById(newrespose.ancId);
         let hiring=await Seekers.findById(newrespose.userId)
+        let fc=await Seekers.findById(anc.companyId)
         resposedata.push({
             hiring:hiring,
             anc:anc,
+            fc:fc,
             // loc:loc,
             req:newrespose
         });
@@ -285,54 +289,87 @@ catch(e){
 })
 
 
+router.get('/viewjobseekers/:id', async(req,res)=>{
+    try {
+        let id = req.params.id;
+        console.log(id);
+        let anc = await Announcement.find({ companyId: id });
+        // ----------------------------
+
+        
+        // return true
+        
+        let newrequest = [];
+        let jobsArray = [];
+        for(let x of anc){
+            
+            let jobs = await Addjob.find({ ancId: x._id });
+            jobsArray.push(jobs)
+        }
+        console.log(jobsArray,'------jobs-----------');
+
+        res.json(jobsArray);
+return true
+
+            // for(let y of job){
+            //     let requests = await jobrequest.find({ jobId: y._id });
+            //     let uniqueRequests = requests.filter((value, index, self) =>
+            //         index === self.findIndex((t) => (
+            //             t._id === value._id
+            //         ))
+            //     );
+            //     newrequest = newrequest.concat(uniqueRequests);
+            // }
+        // }
+
+        // Fetch data from Seekers and Addjob
+        // for (let request of newrequest) {
+        //     let seekerData = await Seekers.findById(request.sId);
+        //     let jobData = await Addjob.findById(request.jobId);
+        //     let ancData= await Announcement.findById(jobData.ancId);
+        //     request.seekerData = seekerData;
+        //     request.jobData = jobData;
+        //     request.ancData = ancData;
+
+        // }
+
+    } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
 
 
-
-
-
-
-
-// router.get('/viewsponshistory/:id', async (req, res) => {
-//     let id = req.params.id;
-//     console.log(id);
-//     let events = await Event.find({ orphanageId: id });
-//     console.log(events);
-//     let responseData = [];
-//     let processedEvents = new Set(); // Set to track processed event IDs
-
-//     for (let x of events) {
-//         // Check if the event is already processed
-//         if (processedEvents.has(x._id)) {
-//             continue; // Skip processing if the event is already processed
-//         }
-
-//         let eventProcessed = false;
-
-//         let purposes = await Purpose.find({ eventId: x._id });
-//         for (let y of purposes) {
-//             let sponsor = await Sponsosrship.find({ purposeId: y._id });
-//             for (let z of sponsor) {
-//                 let organizations = await User.findById(z.organizationId);
-//                 responseData.push({
-//                     purpose: y,
-//                     sponsor: z,
-//                     organization: organizations,
-//                     event: x
-//                 });
-//                 eventProcessed = true;
+// router.get('/viewjobseekers/:id', async (req, res) => {
+//     try {
+//         let id = req.params.id;
+//         let jobreq=await jobrequest.find()
+//         console.log('1111111111111111',jobreq);
+//         let anc = await Announcement.find({ companyId: id });
+//         console.log('`````````````',anc);
+//         let responsedata = [];
+//         for (const newresponse of anc) {
+//             let jobs = await Addjob.find({ ancId: newresponse.anc });
+//             console.log('2222222222222',jobs,'0000000000000000');
+//             for (let j of jobs) {
+//                 let request = await jobrequest.find({ jobId: j._id });
+//                 for (let r of request) {
+//                     let users = await Seekers.findById(r.sId);
+//                     responsedata.push({
+//                         users: users,
+//                         job: j,
+//                         jobreq:jobreq,
+//                         acc: newresponse,
+//                         req: r
+//                     });
+//                 }
 //             }
 //         }
 
-//         // If at least one purpose was found for the event, mark the event as processed
-//         if (eventProcessed) {
-//             processedEvents.add(x._id);
-//         }
+//         res.json(responsedata);
+//     } catch (e) {
+//         res.status(500).json({ error: e.message });
 //     }
-//     console.log(responseData);
-//     res.json(responseData);
 // });
-
-
 
 
 export default router

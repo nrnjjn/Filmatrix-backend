@@ -2,11 +2,16 @@ import mongoose, { Schema, model } from "mongoose";
 import Announcement from "./announcement.js";
 import Hiring from "./seekers.js";
 import JobRequest from "./jobrequest.js"; // Importing the JobRequest model
+import Seekers from "./seekers.js";
 
 const addjobSchema = new Schema({
     ancId: {
         type: mongoose.Types.ObjectId,
         ref: Announcement
+    },
+    filmCompany:{
+        type: mongoose.Types.ObjectId,
+        ref:Seekers
     },
     userId: {
         type: mongoose.Types.ObjectId,

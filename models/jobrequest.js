@@ -10,7 +10,6 @@ const jobrequestSchema=new Schema({
     },
     jobId:{
         type:mongoose.Types.ObjectId,
-        
     },
     Status:{
         type:String,
