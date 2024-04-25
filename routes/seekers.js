@@ -194,29 +194,42 @@ router.post('/postjobreq', upload.fields([{ name: 'Cv' },{ name: 'File' }]), asy
         // Check if the seeker has already applied for the same job
         const existingJobRequest = await jobrequest.findOne({ sId: seekerId, jobId: jobId });
         if (existingJobRequest) {
-           throw new Error ('already exist')
+            throw new Error('already exist');
         }
 
+        // Fetch the Addjob document corresponding to jobId to get the companyId
+        const addjob = await Addjob.findById(jobId);
+        console.log(addjob,'-------------');
+
         // Proceed with saving the job request if it's a new application
-        else{
-            
+        if (addjob) {
             if (req.files['Cv']) {
                 const cv = req.files['Cv'][0].filename;
                 req.body = { ...req.body, Cv: cv };
             }
             
             if (req.files['File']) {
-                const File = req.files['File'][0].filename;
-                req.body = { ...req.body, File: File };
+                const file = req.files['File'][0].filename;
+                req.body = { ...req.body, File: file };
             }
+
+            // Add companyId to the req.body
+            req.body = { ...req.body, companyId: addjob.companyId };
+            console.log(addjob.companyId,'cccccccccccccccccccc');
+
+            console.log(req.body,'xxxxxxxxxxxxxxxxxxxx');
+
             const newjobreq = new jobrequest(req.body);
             const savedjobreq = await newjobreq.save();
             res.json({ message: "Job request", savedjobreq });
+        } else {
+            throw new Error('Job not found');
         }
-        } catch (e) {
-            res.status(500).json({ message: e.message });
+    } catch (e) {
+        res.status(500).json({ message: e.message });
     }
 });
+
 
 
 

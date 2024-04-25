@@ -31,6 +31,10 @@ const jobrequestSchema=new Schema({
     ancId:{
         type:mongoose.Types.ObjectId,
         ref:Announcement
+    },
+    companyId:{
+        type:mongoose.Types.ObjectId,
+        ref:Seekers
     }
 })
 

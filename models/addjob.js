@@ -9,7 +9,7 @@ const addjobSchema = new Schema({
         type: mongoose.Types.ObjectId,
         ref: Announcement
     },
-    filmCompany:{
+    companyId:{
         type: mongoose.Types.ObjectId,
         ref:Seekers
     },

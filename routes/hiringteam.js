@@ -13,17 +13,18 @@ import { upload } from '../multer.js';
 import Hiringpreviouswork from '../models/hiringpreviouswork.js';
 const router=express()
 
-router.post('/addjob',async(req,res)=>{
-    try{
-    console.log(req.body);
-    const newAddjob = new Addjob(req.body)
-    const savedAddjob = await newAddjob.save();
-    res.json({message:"New Job",savedAddjob})
+router.post('/addjob', async (req, res) => {
+    try {
+      console.log(req.body);
+      const { companyId, ...jobData } = req.body; // Extract companyId from req.body
+      const newAddjob = new Addjob({ ...jobData, companyId }); // Include companyId in the job data
+      const savedAddjob = await newAddjob.save();
+      res.json({ message: "New Job", savedAddjob });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-    catch(e){
-        res.json(e.message)
-            }
-})
+  });
+  
 
 
 

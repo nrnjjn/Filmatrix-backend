@@ -293,49 +293,27 @@ router.get('/viewjobseekers/:id', async(req,res)=>{
     try {
         let id = req.params.id;
         console.log(id);
-        let anc = await Announcement.find({ companyId: id });
-        // ----------------------------
-
-        
-        // return true
-        
-        let newrequest = [];
-        let jobsArray = [];
-        for(let x of anc){
-            
-            let jobs = await Addjob.find({ ancId: x._id });
-            jobsArray.push(jobs)
+        let response=await jobrequest.find({companyId:id})
+        console.log(response);
+        let responsedata=[];
+        for(const newresponse of response){
+            let seek= await Seekers.findById(newresponse.sId);
+            let job=await Addjob.findById(newresponse.jobId);
+            let anc=await Announcement.findById(job.ancId)
+            responsedata.push({
+                seek:seek,
+                job:job,
+                anc:anc,
+                req:newresponse
+            })
         }
-        console.log(jobsArray,'------jobs-----------');
+        console.log(responsedata);
+        res.json(responsedata)
 
-        res.json(jobsArray);
-return true
-
-            // for(let y of job){
-            //     let requests = await jobrequest.find({ jobId: y._id });
-            //     let uniqueRequests = requests.filter((value, index, self) =>
-            //         index === self.findIndex((t) => (
-            //             t._id === value._id
-            //         ))
-            //     );
-            //     newrequest = newrequest.concat(uniqueRequests);
-            // }
-        // }
-
-        // Fetch data from Seekers and Addjob
-        // for (let request of newrequest) {
-        //     let seekerData = await Seekers.findById(request.sId);
-        //     let jobData = await Addjob.findById(request.jobId);
-        //     let ancData= await Announcement.findById(jobData.ancId);
-        //     request.seekerData = seekerData;
-        //     request.jobData = jobData;
-        //     request.ancData = ancData;
-
-        // }
-
-    } catch(e) {
-        res.status(500).json({ error: e.message });
-    }
+    } 
+    catch(e) {
+        res.json(e.message)
+        }
 });
 
 
