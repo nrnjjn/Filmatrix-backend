@@ -134,7 +134,7 @@ router.get('/viewprofile/:id',async(req,res)=>{
     }
 })
 
-router.put('/editprofile/:id',upload.fields([{name:'Liscence'}]),async(req,res)=>{
+router.put('/editprofile/:id',upload.single('Liscence'),async(req,res)=>{
     try{
     
     if(req.files['Liscence']){
@@ -145,6 +145,8 @@ router.put('/editprofile/:id',upload.fields([{name:'Liscence'}]),async(req,res)=
     let id=req.params.id
     console.log(req.body)
     let response=await Seekers.findByIdAndUpdate(id,req.body)
+    console.log(response);
+    res.json(response)
 }
 catch(e){
     res.json(e.message)
