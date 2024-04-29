@@ -38,6 +38,10 @@ const postlocreqSchema = new Schema({
         type:mongoose.Types.ObjectId,
         ref:Locationreq
     },
+    Total:{
+        type:String
+    },
+
     Feedback:{
         type:String,
         default:'No feedback'

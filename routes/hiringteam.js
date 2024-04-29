@@ -191,18 +191,27 @@ router.put('/locationfeedback/:id',async(req,res)=>{
 
 })
 
-router.post('/locationbooking',async(req,res)=>{
-    try{
-    let id=req.params.id
-    console.log(req.body);
-    const newLocationbooking = new Locationbooking(req.body)
-    const savedLocationbooking = await newLocationbooking.save();
-    res.json({message:"Location booking request",savedLocationbooking})
+router.post('/locationbooking', async (req, res) => {
+    try {
+        let id = req.params.id;
+        console.log(req.body);
+        
+        // Extract total from Fcreq
+        let total = req.body.Fcreq.total;
+
+        // Create a new Locationbooking instance with the extracted total
+        const newLocationbooking = new Locationbooking({ ...req.body, total });
+
+        // Save the new Locationbooking instance to the database
+        const savedLocationbooking = await newLocationbooking.save();
+
+        // Send a response with the saved Locationbooking data
+        res.json({ message: "Location booking request", savedLocationbooking });
+    } catch (e) {
+        // If an error occurs, send a JSON response with the error message
+        res.json(e.message);
     }
-    catch(e){
-        res.json(e.message)
-            }
-})
+});
 
 router.get('/viewlocationbooking/:id',async(req,res)=>{
     try{

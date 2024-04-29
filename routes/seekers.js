@@ -100,21 +100,33 @@ router.get('/viewpreviousworkd/:id',async(req,res)=>{
     }
 })
 
-router.put('/editpreviouswork/:id',upload.fields([{name:'Image'}]),async(req,res)=>{
+
+
+
+router.put('/editpreviouswork/:id',upload.fields([{name:'Image'},{name:'Liscence'}]),async(req,res)=>{
     try{
     if(req.files['Image']){
         const image =  req.files['Image'][0].filename;  
         console.log(image)
         req.body={...req.body,Image:image}
     }
+    if(req.files['Liscence']){
+        const liscence =  req.files['Liscence'][0].filename;  
+        console.log(image)
+        req.body={...req.body,Liscence:liscence}
+    }
     let id=req.params.id
     console.log(req.body)
     let response=await Addpreviouswork.findByIdAndUpdate(id,req.body)
+    res.json(response)
 }
 catch(e){
+    console.log(e);
     res.json(e.message)
 }
 })
+
+
 
 router.delete('/deletepreviouswork/:id',async(req,res)=>{
     let id=req.params.id
@@ -134,15 +146,22 @@ router.get('/viewprofile/:id',async(req,res)=>{
     }
 })
 
-router.put('/editprofile/:id',upload.single('Liscence'),async(req,res)=>{
+router.put('/editprofile/:id',upload.fields([{name:'Liscence'},{name:'Idproof'}]),async(req,res)=>{
     try{
-    
-    if(req.files['Liscence']){
-        const liscence =  req.files['Liscence'][0].filename;  
-        console.log(liscence)
-        req.body={...req.body,Liscence:liscence}
+    if(req.files){
+
+        if(req.files['Liscence']){
+            const liscence =  req.files['Liscence'][0].filename;  
+            console.log(liscence)
+            req.body={...req.body,Liscence:liscence}
+        }
+        if(req.files['Idproof']){
+            const idproof = req.files['Idproof'][0].filename
+            console.log(idproof);
+            req.body={...req.body,Idproof:idproof}
+        }
     }
-    let id=req.params.id
+        let id=req.params.id
     console.log(req.body)
     let response=await Seekers.findByIdAndUpdate(id,req.body)
     console.log(response);
