@@ -26,7 +26,15 @@ router.post('/register',upload.fields([{name:'Idproof'},{name:"Liscence"}]),asyn
     }
     const existMail=await Seekers.findOne({Email:req.body.Email})
     if(existMail){
-        return res.status(400).json({message:'mail exist'})
+        return res.status(400).json({message:'Email exist'})
+    }
+    const existPhone=await Seekers.findOne({Phone:req.body.Phone})
+    if(existPhone){
+        return res.status(400).json({message:'Phone number exist'})
+    }
+    const existLiscence=await Seekers.findOne({liscenceNo:req.body.liscenceNo})
+    if(existLiscence){
+        return res.status(400).json({message:'Lisence number exist'})
     }
     const newSeekers = new Seekers(req.body)
     const savedSeekers = await newSeekers.save();

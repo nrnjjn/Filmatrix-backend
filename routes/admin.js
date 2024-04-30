@@ -5,6 +5,7 @@ import jobrequest from '../models/jobrequest.js';
 import Announcement from '../models/announcement.js';
 import Addjob from '../models/addjob.js';
 import category from '../models/category.js';
+import { upload } from '../multer.js';
 
 const router=express()
 
@@ -23,14 +24,14 @@ router.put('/acceptusers/:id',async(req,res)=>{
     }
 })
 
-router.post('/createcategory',async(req,res)=>{
+router.post('/createcategory',upload.single('Image'),async(req,res)=>{
     try{
         console.log(req.body);
-    let response=new category({name:req.body.category})
-
+        let imagepath=req.file.filename
+        req.body={...req.body,Image:imagepath}
+    let response=new category(req.body)
     let ress = await response.save()
     res.json(ress)
-
     }
     catch(e){
         res.json(e.message)

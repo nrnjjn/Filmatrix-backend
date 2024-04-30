@@ -4,8 +4,9 @@ const categorySchema=new Schema({
     name:{
         type:String
     },
-   
-    
+   Image:{
+    type:String
+   }
 })
 
 const category = model('category',categorySchema);

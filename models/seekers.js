@@ -7,8 +7,7 @@ const seekersSchema = new Schema({
     Email:{
         type:String,
         required:true,
-        unique:true
-        
+        unique:true 
     },
     Phone:{
         type:Number,

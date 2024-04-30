@@ -138,25 +138,12 @@ router.put('/managebookings/:id',async(req,res)=>{
 router.get('/viewpayment/:id',async(req,res)=>{
     try{
         let id=req.params.id
-        console.log(id,'-----Location owner id-----');
         console.log(req.body);
-        let response=await Payment.find({locationownerId:id})
+        let response=await Locationbooking.findById(id)
+        let anc=await Announcement.findById(response.ancId)
+        let hiring=await Seekers.findById(response.hiringId)
         console.log(response);
-        let responsedata=[];
-        for (const newresponse of response){
-            let hiring=await Seekers.findById(newresponse?.hiringId);
-            let booking=await Locationbooking.findById(newresponse?.bookingId);
-            let anc=await Announcement.findById(booking?.ancId);
-            responsedata.push({
-                hiring:hiring,
-                booking:booking,
-                anc:anc,
-                req:newresponse
-
-            })
-        }
-        console.log(responsedata);
-        res.json(responsedata)
+        res.json({response,anc,hiring})
     }
     catch(e){
         res.json(e.message)
