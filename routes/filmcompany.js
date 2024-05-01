@@ -34,6 +34,7 @@ router.put('/editanc/:id',upload.fields([{name:'Image'}]),async(req,res)=>{
     let id=req.params.id
     console.log(req.body)
     let response=await Announcement.findByIdAndUpdate(id,req.body)
+    res.json(response)
 }
 catch(e){
     res.json(e.message)

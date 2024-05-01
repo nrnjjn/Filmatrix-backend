@@ -61,19 +61,41 @@ router.delete('/viewcategory/:id',async(req,res)=>{
     }
 })
 
-router.put('/viewcategory/:id',async(req,res)=>{
+router.put('/editcategory/:id', upload.fields([{ name: 'Image' }]), async (req, res) => {
+    try {
+        let id = req.params.id;
+        let updateData = {};
+        
+        if (req.files['Image']) {
+            const image = req.files['Image'][0].filename;
+            updateData.Image = image;
+        }
+
+        if (req.body.name) {
+            updateData.name = req.body.name;
+        }
+
+        let response = await category.findByIdAndUpdate(id, updateData, { new: true }); // Ensure { new: true } to return the updated document
+
+        res.json(response);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+router.get('/categorydetail/:id',async(req,res)=>{
     try{
-    let response=category.findByIdAndUpdate(req.params.id,{$set:req.body})
-
-    res.json(response)
-
+        let id=req.params.id
+        console.log(id);
+        let response=await category.findById(id)
+        console.log(response);
+        res.json(response)
     }
     catch(e){
         res.json(e.message)
+    
     }
 })
-
-
 
 
 router.get('/viewfilmcompany',async(req,res)=>{
