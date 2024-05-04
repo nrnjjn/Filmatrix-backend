@@ -38,7 +38,7 @@ const seekersSchema = new Schema({
         type:String
     },
     liscenceNo:{
-        type:Number
+        type:String
     },
     userType:{
         type:String

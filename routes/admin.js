@@ -7,8 +7,38 @@ import Addjob from '../models/addjob.js';
 import category from '../models/category.js';
 import { upload } from '../multer.js';
 
+import nodemailer from 'nodemailer'
 const router=express()
 
+
+
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'filmatrrix@gmail.com',
+    pass: 'gorb cnmg fzkz hukp',
+  },
+});
+
+router.post('/sendOTP', async (req, res) => {
+  const { Email } = req.body;
+  const otp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+  const mailOptions = {
+    from: 'filmatrrix@gmail.com',
+    to: Email,
+    subject: 'Your OTP for Verification',
+    text: `Your OTP is: ${otp}`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).send({ message: 'OTP sent successfully',otp });
+  } catch (error) {
+    console.error('Error sending OTP:', error);
+    res.status(500).send({ error: 'Failed to send OTP' });
+  }
+});
 
 
 router.put('/acceptusers/:id',async(req,res)=>{
