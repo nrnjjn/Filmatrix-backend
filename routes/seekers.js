@@ -32,10 +32,12 @@ router.post('/register',upload.fields([{name:'Idproof'},{name:"Liscence"}]),asyn
     if(existPhone){
         return res.status(400).json({message:'Phone number exist'})
     }
+    if(req.body.liscenceNo){
     const existLiscence=await Seekers.findOne({liscenceNo:req.body.liscenceNo})
     if(existLiscence){
         return res.status(400).json({message:'Lisence number exist'})
     }
+}
     const newSeekers = new Seekers(req.body)
     const savedSeekers = await newSeekers.save();
     console.log(newSeekers,'new user');

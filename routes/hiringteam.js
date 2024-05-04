@@ -267,6 +267,22 @@ router.get('/viewhreq/:id',async(req,res)=>{
 
 
 
+router.get('/hiringreqq',async(req,res)=>{
+    try{
+        let response=await Hiringrequest.find()
+        console.log(response)
+        res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+
+
+
+
+
+
 router.put('/hiringprogress/:id',async(req,res)=>{
     try{
     console.log('server');

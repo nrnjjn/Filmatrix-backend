@@ -31,6 +31,8 @@ router.post('/sendOTP', async (req, res) => {
     text: `Your OTP is: ${otp}`,
   };
 
+
+
   try {
     await transporter.sendMail(mailOptions);
     res.status(200).send({ message: 'OTP sent successfully',otp });
@@ -40,6 +42,16 @@ router.post('/sendOTP', async (req, res) => {
   }
 });
 
+
+router.put('/changepass/:Email',async(req,res)=>{
+    let Email=req.params.Email
+    let response=await Seekers.findOne({Email:Email})
+    console.log(response);
+    let response1=await Seekers.findByIdAndUpdate(response._id, req.body,{new:true})
+    console.log(req.body); 
+    console.log(response1);
+    res.json(response1)
+})
 
 router.put('/acceptusers/:id',async(req,res)=>{
     try{
