@@ -549,6 +549,7 @@ catch(e){
 router.delete('/deletepreviouswork/:id',async(req,res)=>{
     let id=req.params.id
     let response=await Hiringpreviouswork.findByIdAndDelete(id)
+    res.json(response)
 })
 
 

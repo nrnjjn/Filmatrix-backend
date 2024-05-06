@@ -8,6 +8,7 @@ import Hiringrequest from '../models/hiringreq.js'
 import Locationreq from '../models/locationfcreq.js'
 import jobrequest from '../models/jobrequest.js'
 import Addjob from '../models/addjob.js'
+import Hiringpreviouswork from '../models/hiringpreviouswork.js'
 const router=express()
 
 
@@ -350,5 +351,30 @@ router.get('/viewjobseekers/:id', async(req,res)=>{
 //     }
 // });
 
+
+router.get('/viewpwk/:id',async(req,res)=>{
+    try{
+    console.log(req.body);
+    let response=await Hiringpreviouswork.find()
+    console.log(response)
+    res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
+
+router.get('/viewpwkd/:id',async(req,res)=>{
+    try{
+    let id=req.params.id
+    console.log(id);
+    let response=await Hiringpreviouswork.findById(id)
+    console.log(response)
+    res.json(response)
+    }
+    catch(e){
+        res.json(e.message)
+    }
+})
 
 export default router

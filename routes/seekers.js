@@ -171,7 +171,9 @@ router.put('/editprofile/:id',upload.fields([{name:'Liscence'},{name:'Idproof'}]
             req.body={...req.body,Idproof:idproof}
         }
     }
-        let id=req.params.id
+
+    
+    let id=req.params.id
     console.log(req.body)
     let response=await Seekers.findByIdAndUpdate(id,req.body)
     console.log(response);
