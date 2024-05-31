@@ -16,8 +16,6 @@ import adminRouter from './routes/admin.js'
 
 app.use('/uploads', express.static('uploads'));
 
-
-
 app.use('/seekers',seekersRouter)
 app.use('/filmcompany',filmcompanyRouter)
 app.use('/hiringteam',hiringteamRouter)
