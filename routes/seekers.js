@@ -19,7 +19,6 @@ router.post('/register',upload.fields([{name:'Idproof'},{name:"Liscence"}]),asyn
         req.body={...req.body,Idproof:idproof}
     }
     if(req.files['Liscence']){
-
         const liscence =  req.files['Liscence'][0].filename;  
         console.log(liscence)
         req.body={...req.body,Liscence:liscence}

@@ -149,6 +149,8 @@ router.get('/viewhiringdetail/:id',async(req,res)=>{
     }
 })
 
+
+
 router.put('/manageHiring/:id',async (req,res)=>{
     try{
     let id=req.params.id
