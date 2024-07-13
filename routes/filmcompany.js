@@ -131,9 +131,6 @@ catch(e){
 })
 
 
-
-
-
 router.get('/viewhiringdetail/:id',async(req,res)=>{
     try{
     let id=req.params.id

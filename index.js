@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 const app=express()
 app.use(cors())
 app.use(express.json())
-mongoose.connect('mongodb://127.0.0.1:27017/filmatrix')
+mongoose.connect('mongodb+srv://niranjanbabu6677:jdwtk6zSfaFgYgFB@cluster0.lwqc85s.mongodb.net/filmatrix')
   .then(() => console.log('Connected!'));
 
 import seekersRouter from './routes/seekers.js'
